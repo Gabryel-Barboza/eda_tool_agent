@@ -18,6 +18,7 @@ O chatbot é construído utilizando Flask (Python) para a interface web e se com
 
 ### Pré-requisitos 📖
 
+  * 3 GB de armazenamento disponível. 
   * [Docker](https://www.docker.com/products/docker-desktop/) instalado na sua máquina.
 
 ### Instalação e Execução com Docker 🚩
