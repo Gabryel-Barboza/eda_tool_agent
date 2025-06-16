@@ -80,21 +80,28 @@ Após a execução do Docker Compose, você poderá acessar o chatbot e o n8n no
 
   Interface Web do Chatbot: http://localhost:8000.
 
-  ![Imagem do Chatbot]()
+  <img width="500px" alt="Imagem do Chatbot" src="https://github.com/user-attachments/assets/b1640d4a-d74c-4ca4-8708-9d0fb61b21d4" />
 
   Interface Web do n8n: http://localhost:5678.
-  
-  ![Imagem da interface N8N]()
+
+  <img width="500px" alt="Imagem da interface N8N" src="https://github.com/user-attachments/assets/c56a771f-862c-460d-8de8-9d7042937cd6" />
 
 ## Utilização ✅
 
   Acesse a interface web do N8N através do link fornecido acima. Se necessário crie sua conta do N8N e abra um novo workflow. Clique no botão ao lado de `save` e depois em `import file`, selecione o arquivo `agente_leitor_csv.json` no diretório do projeto.
 
-  Configure as credenciais de cada Nó do agente, utilize uma chave de API para os modelos LLM (modelo gemini-flash 2.0 testado) e crie uma credencial de acesso ao banco de dados em um dos nós. No processo de criação, insira as seguintes informações para cada campo:
+  Configure as credenciais de cada Nó do agente, utilize uma chave de API para os modelos LLM (modelo gemini-flash 2.0 testado) e crie uma credencial de acesso ao banco de dados em um dos nós. No processo de criação de credencial do MySQL, insira as seguintes informações para cada campo:
 
-  * abc
+  * host: mysql_db
+  * database: n8n_notas_fiscais
+  * user: csv_agent
+  * password: 1234 (senha do usuário em `.env`)
 
-  Agora, inicialize o fluxo de trabalho clicando em `active` ao lado de `save` e faça os testes na interface web. Lembre-se que o nó webhook deve possuir a mesma URL configurada no arquivo Dockerfile citado
+ Deixe o restante das configurações como padrão. **Se apareceu uma mensagem de conexão realizada com sucesso, então a sua configuração do banco de dados está correta**.
+
+ Atualize o restantes dos nós com alertas ⁉, selecionando as credenciais corretamente.
+
+  Agora, inicialize o fluxo de trabalho clicando em `active` ao lado de `save` e faça os testes na interface web. Lembre-se que o **nó webhook deve possuir a mesma URL** configurada no arquivo Dockerfile citado.
   
   Digite sua mensagem na caixa de texto do chatbot e clique em "Enviar". A mensagem será enviada para o webhook do n8n. O n8n processará a mensagem e enviará uma resposta de volta para o chatbot, que será exibida na interface.
   
