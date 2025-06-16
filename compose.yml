@@ -9,6 +9,8 @@ services:
       - ~/docker-shared/n8n/:/home/shared
     networks:
       - csv_agent_net
+    env_file:
+      - .env
     expose:
       - 5678
     depends_on:
