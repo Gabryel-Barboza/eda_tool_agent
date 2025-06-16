@@ -38,7 +38,7 @@ No diretório raiz do seu projeto, onde está localizada a pasta `chatbot_ui` ab
 
 3. Execute o Docker Compose
 
-Agora, execute o seguinte comando no terminal, no mesmo diretório:
+Agora, com o Docker inicializado (execute o aplicativo uma vez) rode o seguinte comando no terminal, no mesmo diretório:
 
 ```bash
 docker compose up -d
