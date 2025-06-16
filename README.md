@@ -1,16 +1,26 @@
-# Agente de Conversas com RAG
+# Agente de Conversas com RAG 🤖
 
 Este projeto consiste em um chatbot web que interage com um agente de automação rodando no **N8N**. A interface web permite aos usuários enviar mensagens que são processadas pelo N8N, e as respostas do agente são exibidas de volta no chat.
 
-## Visão Geral
+### Índice
+
+* [Visão Geral](https://github.com/Gabryel-Barboza/rag_agent_chatbot?tab=readme-ov-file#vis%C3%A3o-geral)
+* [Pré-requisitos](https://github.com/Gabryel-Barboza/rag_agent_chatbot?tab=readme-ov-file#pr%C3%A9-requisitos)
+* [Instalação e Execução com Docker](https://github.com/Gabryel-Barboza/rag_agent_chatbot?tab=readme-ov-file#instala%C3%A7%C3%A3o-e-execu%C3%A7%C3%A3o-com-docker)
+* [Endpoints de Acesso](https://github.com/Gabryel-Barboza/rag_agent_chatbot?tab=readme-ov-file#endpoints-de-acesso)
+* [Utilização](https://github.com/Gabryel-Barboza/rag_agent_chatbot?tab=readme-ov-file#utiliza%C3%A7%C3%A3o)
+* [Estrutura de Código](https://github.com/Gabryel-Barboza/rag_agent_chatbot?tab=readme-ov-file#estrutura-de-c%C3%B3digo)
+* [Próximos Passos](https://github.com/Gabryel-Barboza/rag_agent_chatbot?tab=readme-ov-file#pr%C3%B3ximos-passos)
+
+## Visão Geral 🗺
 
 O chatbot é construído utilizando Flask (Python) para a interface web e se comunica com o n8n através de webhooks HTTP. A interface do usuário é estilizada com Tailwind CSS e inclui funcionalidades como histórico de mensagens (em uma barra lateral) e suporte básico para renderização de Markdown nas respostas do bot.
 
-### Pré-requisitos
+### Pré-requisitos 📖
 
   * [Docker](https://www.docker.com/products/docker-desktop/) instalado na sua máquina.
 
-### Instalação e Execução com Docker
+### Instalação e Execução com Docker 🚩
 
 Este projeto pode ser facilmente instanciado utilizando Docker e Docker Compose. Certifique-se de ter o Docker e o Docker Compose (é instalado por padrão junto ao Docker) instalados antes de prosseguir.
 
@@ -21,10 +31,10 @@ Clique no botão em verde `<> Code` e faça o clone com Git utilizando a URL ou 
 2. Abra o diretório do projeto
 
 No diretório raiz do seu projeto, onde está localizada a pasta `chatbot_ui` abra um terminal.
-* Linux: Botão do mouse direito -> abrir no terminal ou `cd ~/caminho_projeto/rag_agent_chatbot`.
-* Windows: Abrir pasta do projeto, na barra de endereços digite `CMD` ou abra um terminal e navegue até o diretório com `cd caminho_projeto\rag_agent_chatbot`.
+* **Linux**: Botão do mouse direito -> abrir no terminal ou `cd ~/caminho_projeto/rag_agent_chatbot`.
+* **Windows**: Abrir pasta do projeto, na barra de endereços digite `CMD` ou abra um terminal e navegue até o diretório com `cd caminho_projeto\rag_agent_chatbot`.
 
-**Antes de instalar o projeto, renomeie o arquivo `.env.example` para `.env` e altere as configurações de senha se desejado.**
+❗ **Antes de instalar o projeto, renomeie o arquivo `.env.example` para `.env` e altere as configurações de senha se desejado com um editor de texto.**
 
 3. Execute o Docker Compose
 
@@ -44,7 +54,7 @@ Este comando irá construir a imagem Docker (se ainda não existir) e iniciar o 
 
 4. Configure a URL do Webhook do N8N
 
-Importante: Se o projeto não for usado em ambiente local, você precisa configurar a URL do webhook do seu agente n8n no arquivo em chatbot_ui/Dockerfile. As configurações padrão devem funcionar em `localhost`.
+Importante: Se o projeto não for usado em ambiente local, você precisa configurar a URL do webhook do seu agente n8n no arquivo em `chatbot_ui/Dockerfile`. As configurações padrão devem funcionar em `localhost`.
 
   * Abra o arquivo.
 
@@ -63,9 +73,9 @@ Importante: Se o projeto não for usado em ambiente local, você precisa configu
     docker compose up -d
     ```
 
-### Endpoints de Acesso
+### Endpoints de Acesso 📲
 
-Após a execução do Docker Compose, você poderá acessar o chatbot e o n8n nos seguintes endpoints:
+Após a execução do Docker Compose, você poderá acessar o chatbot e o n8n nos seguintes endpoints (ambiente local):
 
   Interface Web do Chatbot: http://localhost:8000.
 
@@ -75,7 +85,7 @@ Após a execução do Docker Compose, você poderá acessar o chatbot e o n8n no
   
   ![Imagem da interface N8N]()
 
-## Utilização
+## Utilização ✅
 
   Acesse a interface web do N8N através do link fornecido acima. Se necessário crie sua conta do N8N e abra um novo workflow. Clique no botão ao lado de `save` e depois em `import file`, selecione o arquivo `agente_leitor_csv.json` no diretório do projeto.
 
@@ -85,12 +95,11 @@ Após a execução do Docker Compose, você poderá acessar o chatbot e o n8n no
 
   Agora, inicialize o fluxo de trabalho clicando em `active` ao lado de `save` e faça os testes na interface web. Lembre-se que o nó webhook deve possuir a mesma URL configurada no arquivo Dockerfile citado
   
-  Digite sua mensagem na caixa de texto do chatbot e clique em "Enviar".
-  A mensagem será enviada para o webhook do n8n.
-  O n8n processará a mensagem e enviará uma resposta de volta para o chatbot, que será exibida na interface.
+  Digite sua mensagem na caixa de texto do chatbot e clique em "Enviar". A mensagem será enviada para o webhook do n8n. O n8n processará a mensagem e enviará uma resposta de volta para o chatbot, que será exibida na interface.
+  
   Você pode usar o botão no canto superior direito para abrir a barra lateral com o histórico de mensagens.
 
-## Estrutura de Código
+## Estrutura de Código 🔢
 
 A estrutura do código do projeto é a seguinte:
 
@@ -108,7 +117,7 @@ A estrutura do código do projeto é a seguinte:
     styles.css 
   ```
 
-## Próximos Passos
+## Próximos Passos 📈
 
     Melhorar a interface do usuário e a experiência do usuário.
     Adicionar mais funcionalidades ao chatbot, como suporte a diferentes tipos de mensagens ou interações mais complexas.
