@@ -52,6 +52,9 @@ body {
   word-break: anywhere;
 }
 
+#chatbox table {
+  background-color: #808080;
+}
 
 #sidebar {
   position: fixed;

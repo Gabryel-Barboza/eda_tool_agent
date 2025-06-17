@@ -8,7 +8,7 @@ function addMessage(message, sender) {
   messageDiv.classList.add('flex', sender === 'user' ? 'justify-end' : 'justify-start');
 
   const messageBubble = document.createElement('div');
-  messageBubble.classList.add('p-3', 'rounded-lg', 'max-w-md', 'text-sm');
+  messageBubble.classList.add('p-4', 'rounded-lg', 'max-w-md', 'text-sm', 'overflow-x-scroll');
   messageBubble.classList.add(sender === 'user' ? 'bg-gray-700' : 'bg-blue-500', 'text-white');
 
   if (sender === 'bot') {
