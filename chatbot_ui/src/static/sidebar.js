@@ -29,7 +29,7 @@ window.updateSidebarHistory = (userMessage, botReply) => {
   userMsgText.classList.add('font-medium');
   listItem.appendChild(userMsgText);
 
-  // Opcional: Adiciona um texto menor para a resposta do bot para contexto
+  // Adiciona um texto menor para a resposta do bot para contexto
   const botReplyPreview = document.createElement('p');
   botReplyPreview.textContent = botReply.length > 40 ? botReply.substring(0, 40) + '...' : botReply;
   botReplyPreview.classList.add('text-gray-400', 'text-xs', 'mt-1');
@@ -37,7 +37,7 @@ window.updateSidebarHistory = (userMessage, botReply) => {
 
 
   // Adiciona um atributo de dados para vincular ao índice completo do histórico
-  // Note: Se o array for sempre adicionado no início (unshift), o índice precisaria ser ajustado ou o array invertido.
+  // Se o array for sempre adicionado no início (unshift), o índice precisaria ser ajustado ou o array invertido.
   // Por simplicidade, vamos usar o índice do unshift (0 para o mais recente).
   listItem.dataset.index = 0; // O item mais recente estará sempre no índice 0 após unshift
 
@@ -45,11 +45,9 @@ window.updateSidebarHistory = (userMessage, botReply) => {
   listItem.addEventListener('click', (event) => {
     const index = parseInt(event.currentTarget.dataset.index, 10);
     const selectedConversation = sessionChatHistory[index];
+
     if (selectedConversation) {
-      // Em um cenário real, você dispararia um evento ou chamaria uma função no chat principal
-      // para exibir 'selectedConversation.user' e 'selectedConversation.bot' na caixa de chat.
       console.log('Carregando histórico da conversa:', selectedConversation);
-      // Exemplo: Se você tivesse uma função global no main.js como 'loadChatConversation(userMsg, botMsg)', você a chamaria aqui.
       alert(`Você: ${selectedConversation.user}\nAgente: ${selectedConversation.bot}`);
     }
   });

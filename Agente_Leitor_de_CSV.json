@@ -131,8 +131,8 @@
     {
       "parameters": {
         "content": "",
-        "height": 580,
-        "width": 1580,
+        "height": 620,
+        "width": 2020,
         "color": 7
       },
       "type": "n8n-nodes-base.stickyNote",
@@ -455,8 +455,8 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1320,
-        840
+        1460,
+        820
       ],
       "id": "507ee8c7-6d13-4a4a-9d84-37418ff6e41a",
       "name": "Sticky Note5"
@@ -487,7 +487,7 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.3,
       "position": [
-        1720,
+        2000,
         1040
       ],
       "id": "d38051e3-b633-4d9e-ac5d-77cc4ef97040",
@@ -501,8 +501,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        1140,
-        1260
+        1400,
+        1240
       ],
       "id": "9c1fe561-bdda-4b05-80a2-f5b196b14552",
       "name": "Google Gemini Chat Model1",
@@ -518,7 +518,7 @@
         "promptType": "define",
         "text": "={{ $json.body.message }}",
         "options": {
-          "systemMessage": "Você é um agente especializado em consultas SQL, focado em gerar SELECT statements para MySQL. Sua função é criar queries eficientes, baseadas estritamente nas perguntas do usuário e otimizadas para o banco de dados fornecido.\n\n* Validação de Pergunta: Se a pergunta do usuário não estiver diretamente relacionada ao esquema do banco de dados, responda com \"prompt inválido\".\n* Apenas Consultas de Busca: Você só pode gerar queries SELECT. Qualquer solicitação que implique em outras operações (INSERT, UPDATE, DELETE, etc.) resultará em \"prompt inválido\".\n* Limitação de Resultados: Para queries com alto potencial de retorno, aplique a cláusula LIMIT. Se o usuário especificar um limite maior, utilize-o.\n* Sintaxe da Resposta: A saída deve ser apenas a query SQL, sem caracteres adicionais ou formatação de markdown de código (por exemplo, SELECT modelo FROM notas_fiscais WHERE chave_acesso = 'chave de acesso';).\n* Finalização: Analise o código gerado para corrigir possíveis erros.\n\nEsquema do Banco de Dados a ser Considerado:\nCREATE TABLE IF NOT EXISTS notas_fiscais(\nchave_acesso VARCHAR(44) PRIMARY KEY NOT NULL,\nmodelo VARCHAR(70) NOT NULL,\nserie VARCHAR(3) NOT NULL,\nnumero VARCHAR(9) NOT NULL,\nnatureza_operacao VARCHAR(60) NOT NULL,\ndata_emissao DATETIME NOT NULL,\nevento_mais_recente VARCHAR(255),\ndata_hora_evento_mais_recente DATETIME,\ncnpj_cpf_emitente VARCHAR(14) NOT NULL,\nrazao_social_emitente VARCHAR(255) NOT NULL,\ninscricao_estadual_emitente VARCHAR(14),\nuf_emitente CHAR(2) NOT NULL,\nmunicipio_emitente VARCHAR(100),\ncnpj_destinatario VARCHAR(14),\nnome_destinatario VARCHAR(255),\nuf_destinatario CHAR(2),\nindicador_ie_destinatario ENUM(\"NÃO CONTRIBUINTE\", \"CONTRIBUINTE ISENTO\", \"CONTRIBUINTE ICMS\"),\ndestino_operacao VARCHAR(100) NOT NULL,\nconsumidor_final VARCHAR(100) NOT NULL,\npresenca_comprador VARCHAR(100) NOT NULL,\nvalor_nota_fiscal DECIMAL(15, 2) NOT NULL\n);\n\nCREATE TABLE IF NOT EXISTS itens_notas_fiscais(\nid INT PRIMARY KEY AUTO_INCREMENT,\nchave_acesso_nf VARCHAR(44) NOT NULL,\nnumero_produto INT NOT NULL,\ndescricao_produto_servico VARCHAR(500) NOT NULL,\ncodigo_ncm_sh VARCHAR(8),\nncm_sh_tipo_produto VARCHAR(255),\ncfop VARCHAR(4) NOT NULL,\nquantidade DECIMAL(15, 4) NOT NULL,\nunidade VARCHAR(6) NOT NULL,\nvalor_unitario DECIMAL(15, 2) NOT NULL,\nvalor_total DECIMAL(15, 2) NOT NULL,\nFOREIGN KEY (chave_acesso_nf) REFERENCES notas_fiscais(chave_acesso)\nON DELETE CASCADE\n        ON UPDATE CASCADE\n);"
+          "systemMessage": "Você é um agente especializado em consultas SQL, focado em gerar SELECT statements para MySQL. Sua função é criar queries eficientes, baseadas estritamente nas perguntas do usuário e otimizadas para o banco de dados fornecido.\n\n* Validação de Pergunta: Se a pergunta do usuário não estiver diretamente relacionada ao esquema do banco de dados, responda com \"prompt inválido\".\n* Apenas Consultas de Busca: Você só pode gerar queries SELECT. Qualquer solicitação que implique em outras operações (INSERT, UPDATE, DELETE, etc.) resultará em \"prompt inválido\".\n* Limitação de Resultados: Para queries com alto potencial de retorno, aplique a cláusula LIMIT. Se o usuário especificar um limite maior, utilize-o.\n* Sintaxe da Resposta: A saída deve ser apenas a query SQL, sem caracteres adicionais ou formatação de markdown de código (por exemplo, SELECT modelo FROM notas_fiscais WHERE chave_acesso = 'chave de acesso';).\n* Dados disponíveis: Os dados persistidos no banco possuem data a partir de janeiro de 2024, considere essa informação na geração de querys.\n* Formatação: Formate valores monetários seguindo o padrão brasileiro: R$XXX.XXX,XX\n* Finalização: Analise o código gerado para corrigir possíveis erros.\n\nEsquema do Banco de Dados a ser Considerado:\nCREATE TABLE IF NOT EXISTS notas_fiscais(\nchave_acesso VARCHAR(44) PRIMARY KEY NOT NULL,\nmodelo VARCHAR(70) NOT NULL,\nserie VARCHAR(3) NOT NULL,\nnumero VARCHAR(9) NOT NULL,\nnatureza_operacao VARCHAR(60) NOT NULL,\ndata_emissao DATETIME NOT NULL,\nevento_mais_recente VARCHAR(255),\ndata_hora_evento_mais_recente DATETIME,\ncnpj_cpf_emitente VARCHAR(14) NOT NULL,\nrazao_social_emitente VARCHAR(255) NOT NULL,\ninscricao_estadual_emitente VARCHAR(14),\nuf_emitente CHAR(2) NOT NULL,\nmunicipio_emitente VARCHAR(100),\ncnpj_destinatario VARCHAR(14),\nnome_destinatario VARCHAR(255),\nuf_destinatario CHAR(2),\nindicador_ie_destinatario ENUM(\"NÃO CONTRIBUINTE\", \"CONTRIBUINTE ISENTO\", \"CONTRIBUINTE ICMS\"),\ndestino_operacao VARCHAR(100) NOT NULL,\nconsumidor_final VARCHAR(100) NOT NULL,\npresenca_comprador VARCHAR(100) NOT NULL,\nvalor_nota_fiscal DECIMAL(15, 2) NOT NULL\n);\n\nCREATE TABLE IF NOT EXISTS itens_notas_fiscais(\nid INT PRIMARY KEY AUTO_INCREMENT,\nchave_acesso_nf VARCHAR(44) NOT NULL,\nnumero_produto INT NOT NULL,\ndescricao_produto_servico VARCHAR(500) NOT NULL,\ncodigo_ncm_sh VARCHAR(8),\nncm_sh_tipo_produto VARCHAR(255),\ncfop VARCHAR(4) NOT NULL,\nquantidade DECIMAL(15, 4) NOT NULL,\nunidade VARCHAR(6) NOT NULL,\nvalor_unitario DECIMAL(15, 2) NOT NULL,\nvalor_total DECIMAL(15, 2) NOT NULL,\nFOREIGN KEY (chave_acesso_nf) REFERENCES notas_fiscais(chave_acesso)\nON DELETE CASCADE\n        ON UPDATE CASCADE\n);"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -543,7 +543,7 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
       "position": [
-        1120,
+        1400,
         1040
       ],
       "id": "9b1ab406-0074-474f-8b2e-efd2aae803bc",
@@ -560,8 +560,8 @@
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
       "position": [
-        940,
-        840
+        960,
+        820
       ],
       "id": "bea29639-8a24-4dc5-8302-ce5400895da3",
       "name": "MySQL",
@@ -649,7 +649,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1500,
+        1780,
         1040
       ],
       "id": "85defa29-eee6-40a3-bbbb-6f4b83d8ca26",
@@ -666,7 +666,38 @@
         1040
       ],
       "id": "33a5857f-8431-41b2-9259-a5a73a0212ef",
-      "name": "Code"
+      "name": "Formatar para SQL"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "database_data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1180,
+        820
+      ],
+      "id": "d46b4873-5aed-4f1d-a9d9-026030ce9ec3",
+      "name": "Criar lista de resultados",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1060,
+        1040
+      ],
+      "id": "fb66e490-39f7-406c-84c0-4d018078420a",
+      "name": "Relay de Informações",
+      "notesInFlow": true,
+      "notes": "Permite ao N8N receber a info do nó correto na ramificação"
     }
   ],
   "pinData": {},
@@ -812,7 +843,7 @@
       "main": [
         [
           {
-            "node": "Code",
+            "node": "Formatar para SQL",
             "type": "main",
             "index": 0
           }
@@ -834,7 +865,7 @@
       "main": [
         [
           {
-            "node": "AI Agent",
+            "node": "Criar lista de resultados",
             "type": "main",
             "index": 0
           }
@@ -852,7 +883,7 @@
         ],
         [
           {
-            "node": "AI Agent",
+            "node": "Relay de Informações",
             "type": "main",
             "index": 0
           }
@@ -870,11 +901,33 @@
         ]
       ]
     },
-    "Code": {
+    "Formatar para SQL": {
       "main": [
         [
           {
             "node": "Se SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar lista de resultados": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Relay de Informações": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
             "type": "main",
             "index": 0
           }
@@ -886,7 +939,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "45c87b35-8904-48c6-927e-451336c8f54a",
+  "versionId": "e982379f-62df-4036-a8e0-de82db1af2d8",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "231b4fcf052db07b90cec772d2e46c08568f8721ea038399e11d196703eb0290"
