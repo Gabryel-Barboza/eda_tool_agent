@@ -4,6 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     groq_api_key: str | None = None
     gemini_api_key: str | None = None
+    database_uri: str
 
     model_config = SettingsConfigDict(
         env_file='.env',

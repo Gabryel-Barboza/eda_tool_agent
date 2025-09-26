@@ -3,7 +3,7 @@ name = "rag-agent-chatbot"
 version = "0.1.0"
 description = "agentic AI with langchain for conversation over data received by the user."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10.7"
 dependencies = [
     "fastapi[standard]>=0.116.2",
     "langchain-community>=0.3.29",

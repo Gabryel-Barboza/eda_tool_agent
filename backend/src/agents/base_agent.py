@@ -10,6 +10,11 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_groq import ChatGroq
 
 from src.settings import settings
+from src.utils.exceptions import (
+    APIKeyNotFoundException,
+    ExecutorNotFoundException,
+    ModelNotFoundException,
+)
 
 
 class BaseAgent:
@@ -17,7 +22,7 @@ class BaseAgent:
         self,
         llm: Optional[BaseChatModel] = None,
     ):
-        self.__llm = llm
+        self._llm = llm
         self.executor = None
         self.prompt = ChatPromptTemplate(
             [
@@ -35,12 +40,10 @@ class BaseAgent:
     @property
     def tools(self):
         """Add tools to amplify the agent capabilities."""
-        if not self.__llm:
-            raise RuntimeError(
-                'No llm found, instantiate a model first with the available methods.'
-            )
+        if not self._llm:
+            raise ModelNotFoundException()
 
-        tools = load_tools(['llm-math'], llm=self.__llm) + [
+        tools = load_tools(['llm-math'], llm=self._llm) + [
             Tool(
                 name='Python Code',
                 func=PythonAstREPLTool,
@@ -57,16 +60,16 @@ class BaseAgent:
             temperature (int, optional): Temperature used in the model.
 
         Raises:
-            RuntimeError: raised when no API key is present.
+            APIKeyNotFoundException: raised when no API key is present.
         """
         if settings.gemini_api_key:
-            self.__llm = ChatGoogleGenerativeAI(
+            self._llm = ChatGoogleGenerativeAI(
                 model_name=model_name, api_key=settings.gemini_api_key, **kwargs
             )
 
             return
 
-        raise RuntimeError(
+        raise APIKeyNotFoundException(
             'Your Gemini API key is null, add an API key to the environment to proceed.'
         )
 
@@ -78,18 +81,35 @@ class BaseAgent:
             temperature (int, optional): Temperature used in the model
 
         Raises:
-            RuntimeError: raised when no API key is present.
+            APIKeyNotFoundException: raised when no API key is present.
         """
         if settings.groq_api_key:
-            self.__llm = ChatGroq(
+            self._llm = ChatGroq(
                 model_name=model_name, api_key=settings.groq_api_key, **kwargs
             )
 
             return
 
-        raise RuntimeError(
+        raise APIKeyNotFoundException(
             'Your Groq API key is null, add an API key to the environment to proceed.'
         )
+
+    def add_output_parser(self, output: any):
+        """Adds structure output for the model response.
+
+        Args:
+            output (any): A TypedDict class with the output format.
+        ```python
+        class QueryOutput(TypedDict):
+            query: Annotated[str, ..., 'Syntactically valid SQL query.']
+        ```
+        Raises:
+            ModelNotFoundException: if no LLM is instantiated before using the agent.
+        """
+        if not self._llm:
+            raise ModelNotFoundException()
+
+        self._llm = self._llm.with_structured_output(output)
 
     def initialize_agent(
         self, tools: list[BaseTool] = None, prompt: ChatPromptTemplate | None = None
@@ -101,22 +121,18 @@ class BaseAgent:
             prompt (ChatPromptTemplate | None, optional): Prompt template used in the agent, if None the default template is used.
 
         Raises:
-            RuntimeError: if no LLM is instantiated before using the agent
+            ModelNotFoundException: if no LLM is instantiated before using the agent.
         """
-        if not self.__llm:
-            raise RuntimeError(
-                'No llm found, instantiate a model first with the available methods.'
-            )
+        if not self._llm:
+            raise ModelNotFoundException()
 
         agent = create_tool_calling_agent(
-            self.__llm, tools=tools or self.tools, prompt=prompt or self.prompt
+            self._llm, tools=tools or self.tools, prompt=prompt or self.prompt
         )
         self.executor = AgentExecutor(agent=agent, tools=tools or self.tools)
 
     def run(self, question: str):
         if not self.executor:
-            raise RuntimeError(
-                'No agent found, initialize the agent first with initialize_agent method.'
-            )
+            raise ExecutorNotFoundException()
 
         return self.executor.invoke({'question': question})

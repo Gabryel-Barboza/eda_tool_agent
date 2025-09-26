@@ -1,2 +1,0 @@
-class DataInserter:
-    pass
