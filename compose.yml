@@ -1,54 +1,32 @@
 services:
-  n8n:
-    container_name: n8n
-    image: docker.n8n.io/n8nio/n8n
+  
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile.streamlit
     ports:
-      - '5678:5678'
-    volumes:
-      - n8n_data:/home/node/.n8n
-      - ~/docker-shared/n8n/:/home/shared
+      - 8501:8501
     networks:
-      - csv_agent_net
-    env_file:
-      - .env
-    expose:
-      - 5678
-    depends_on:
-      - mysql
+      - mainnet
+      
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    networks:
+      - mainnet
+    restart: always
 
   mysql:
-    container_name: mysql_db
-    build: .
-    restart: always
+    image: bitnami/mysql
     ports:
-      - '3306:3306'
-    volumes:
-      - data:/bitnami/mysql/data
+      - 3306:3306
     networks:
-      - csv_agent_net
-    env_file:
-      - .env
-    expose:
-      - 3306
-
-  chatbot_ui:
-    container_name: chatbot_ui
-    build: ./chatbot_ui
-    ports:
-      - '8000:8000'
-    networks:
-      - csv_agent_net
-    depends_on:
-      - n8n
-    expose:
-      - 8000
+      - mainnet
     restart: always
-
-volumes:
-  data:
-  n8n_data:
 
 networks:
-  csv_agent_net:
-    name: csv_agent_net
+  mainnet:
     driver: bridge

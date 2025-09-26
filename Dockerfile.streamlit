@@ -1,0 +1,11 @@
+FROM python:3.12.11-alpine
+
+COPY frontend /client
+
+WORKDIR /client
+
+RUN pip install --no-cache-dir requirements.txt
+
+WORKDIR /client/src
+
+CMD ["streamlit", "run", "main.py"]
