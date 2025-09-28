@@ -1,5 +1,5 @@
 class ModelNotFoundException(Exception):
-    """Raised when no llm was instantiated before using agents."""
+    """Raised when no llm was instantiated before using agents or the model provided was not found."""
 
     def __init__(self, msg: str = None):
         self.msg = (

@@ -1,4 +1,4 @@
 from .answer_agent import AnswerAgent
-from .sql_agent import BaseAgent, QueryOutput, SQLAgent
+from .sql_agent import BaseAgent, SQLAgent
 
-__all__ = ['BaseAgent', 'SQLAgent', 'QueryOutput', 'AnswerAgent']
+__all__ = ['BaseAgent', 'SQLAgent', 'AnswerAgent']

@@ -1,11 +1,10 @@
 from typing import Optional
 
-from langchain.agents import AgentExecutor, Tool, create_tool_calling_agent
+from langchain.agents import AgentExecutor, create_tool_calling_agent
 from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.tools import BaseTool
-from langchain_community.agent_toolkits.load_tools import load_tools
 from langchain_core.language_models import BaseChatModel
-from langchain_experimental.tools import PythonAstREPLTool
+from langchain_core.output_parsers import JsonOutputParser
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_groq import ChatGroq
 
@@ -32,6 +31,7 @@ class BaseAgent:
                     'respond to the questions objectively and only when certain,',
                 ),
                 ('system', 'use the tools available to create better answers'),
+                ('system', '{format_instructions}'),
                 ('human', '{question}'),
                 MessagesPlaceholder('agent_scratchpad'),
             ]
@@ -43,13 +43,8 @@ class BaseAgent:
         if not self._llm:
             raise ModelNotFoundException()
 
-        tools = load_tools(['llm-math'], llm=self._llm) + [
-            Tool(
-                name='Python Code',
-                func=PythonAstREPLTool,
-                description='Use this tool to code and for answering complex questions that require calculations or data manipulation. Use the pandas lib when required for data manipulation.',
-            )
-        ]
+        tools = []
+
         return tools
 
     def init_gemini_model(self, model_name='gemini-2.5-flash', **kwargs) -> None:
@@ -94,23 +89,6 @@ class BaseAgent:
             'Your Groq API key is null, add an API key to the environment to proceed.'
         )
 
-    def add_output_parser(self, output: any):
-        """Adds structure output for the model response.
-
-        Args:
-            output (any): A TypedDict class with the output format.
-        ```python
-        class QueryOutput(TypedDict):
-            query: Annotated[str, ..., 'Syntactically valid SQL query.']
-        ```
-        Raises:
-            ModelNotFoundException: if no LLM is instantiated before using the agent.
-        """
-        if not self._llm:
-            raise ModelNotFoundException()
-
-        self._llm = self._llm.with_structured_output(output)
-
     def initialize_agent(
         self, tools: list[BaseTool] = None, prompt: ChatPromptTemplate | None = None
     ):
@@ -129,10 +107,28 @@ class BaseAgent:
         agent = create_tool_calling_agent(
             self._llm, tools=tools or self.tools, prompt=prompt or self.prompt
         )
-        self.executor = AgentExecutor(agent=agent, tools=tools or self.tools)
+        self.executor = AgentExecutor(
+            agent=agent, tools=tools or self.tools, max_iterations=7
+        )
 
-    def run(self, question: str):
+    def run(self, input: str, output_instructions: str | None = None):
         if not self.executor:
             raise ExecutorNotFoundException()
 
-        return self.executor.invoke({'question': question})
+        return self.executor.invoke(
+            {'input': input, 'format_instructions': output_instructions}
+        )
+
+    @staticmethod
+    def get_json_parser(output_model: any):
+        """Create a structured JSON output parser prompt for the model response.
+
+        Args:
+            output_model (any): A BaseModel class with the output format.
+        Returns:
+            instructions (str): Parser instructions for use in model prompt
+        """
+        parser = JsonOutputParser(pydantic_object=output_model)
+        instructions = parser.get_format_instructions()
+
+        return instructions

@@ -19,7 +19,7 @@ class AnswerAgent(BaseAgent):
                 ),
                 (
                     'system',
-                    '* use your tools available when necessary to improve your response',
+                    '* use your tools available when necessary.',
                 ),
                 (
                     'system',
@@ -27,27 +27,30 @@ class AnswerAgent(BaseAgent):
                 ),
                 (
                     'system',
-                    '* use the SQL tool for answering questions about the database, such as:',
+                    '* use the SQL tool for answering questions with the database, providing it with detailed user request, such as:',
                 ),
-                ('system', '  * How many registries are there for the sales table?'),
-                ('system', '  * Return the mean of the salary of employees'),
+                ('system', '  * Return the mean salary of employees'),
                 (
                     'system',
                     '  * Get the total of sales that occurred between 01/2025 and 04/2025.',
                 ),
+                ('system', '  * What tables are present in the database?'),
                 (
                     'system',
-                    '* first, identify the database scope and then generate matching questions.',
+                    '* first, identify the database scope and then generate matching questions, if the database provides data for it.',
                 ),
-                ('human', '{question}'),
+                (
+                    'system',
+                    '* generate graphs representing the data for the user using "plotly", only when possible, return empty strings otherwise.',
+                ),
+                ('system', '{format_instructions}'),
+                ('human', '{input}'),
                 MessagesPlaceholder('agent_scratchpad'),
             ]
         )
 
-        super().__init__()
-
         # Agent configuration
-        self.init_groq_model()
+        self.init_groq_model(temperature=0)
         self.initialize_agent(tools=self.tools, prompt=prompt_model)
 
     @property
@@ -60,9 +63,9 @@ class AnswerAgent(BaseAgent):
             get_current_datetime,
             use_sql_agent,
             Tool(
-                name='Python Code',
-                func=PythonAstREPLTool,
-                description='Use this tool to code and for answering complex questions that require calculations or data manipulation. Use the pandas lib when required for data manipulation or graphical visualization.',
+                name='Python_code',
+                func=PythonAstREPLTool(),
+                description='Tool for executing code. Use this for efficiency in complex or math tasks, "plotly" is available for graph creation.',
             ),
         ]
 

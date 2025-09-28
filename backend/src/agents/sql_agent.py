@@ -1,14 +1,9 @@
 from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
-from typing_extensions import Annotated, TypedDict
 
-from src.tools.database_tool import execute_query
+from src.tools.database_tool import execute_query, get_tables
 from src.utils.exceptions import ExecutorNotFoundException, ModelNotFoundException
 
 from .base_agent import BaseAgent
-
-
-class QueryOutput(TypedDict):
-    query: Annotated[str, ..., 'Syntactically valid SQL query.']
 
 
 class SQLAgent(BaseAgent):
@@ -29,7 +24,7 @@ class SQLAgent(BaseAgent):
                 ),
                 (
                     'system',
-                    '* you can create & drop tables, use DML or DQL statements.',
+                    '* you are allowed to create & drop tables, and use DML or DQL statements.',
                 ),
                 (
                     'system',
@@ -37,12 +32,15 @@ class SQLAgent(BaseAgent):
                 ),
                 (
                     'system',
-                    '* never create scripts that return all registries from the database, always limit the results to 10 or more if specified.',
+                    '* never create scripts that return all registries from the database, always limit the results between 10 and 100.',
                 ),
                 (
                     'system',
                     '* The DBMS used is {dialect}, use his syntax when creating scripts',
                 ),
+                ('system', '* Your response must be one of:'),
+                ('system', '  * [SQL query results]'),
+                ('system', '  * the string "no data found" if empty.'),
                 ('human', '{query}'),
                 ('human', '{data}'),
                 MessagesPlaceholder('agent_scratchpad'),
@@ -50,17 +48,18 @@ class SQLAgent(BaseAgent):
         )
 
         # Agent configuration
-        self.init_groq_model(temperature=0)
-        self.add_output_parser(QueryOutput)
+        self.init_groq_model('openai/gpt-oss-120b', temperature=0)
         self.initialize_agent(tools=self.tools, prompt=prompt_model)
 
     @property
     def tools(self):
         if not self._llm:
             raise ModelNotFoundException()
-        return [execute_query]
+        tools = [execute_query, get_tables]
 
-    def run(self, query: str, dialect: str, data: any | None = None):
+        return tools
+
+    def run(self, query: str, dialect: str, data=None):
         if not self.executor:
             raise ExecutorNotFoundException()
 
