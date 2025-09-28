@@ -19,7 +19,7 @@ class AnswerAgent(BaseAgent):
                 ),
                 (
                     'system',
-                    '* use your tools available when necessary.',
+                    '* use your tools available when necessary',
                 ),
                 (
                     'system',
@@ -27,7 +27,7 @@ class AnswerAgent(BaseAgent):
                 ),
                 (
                     'system',
-                    '* use the SQL tool for answering questions with the database, providing it with detailed user request, such as:',
+                    '* When needed, use the SQL Specialist to answer specific questions with the database data, providing it with detailed user request, such as:',
                 ),
                 ('system', '  * Return the mean salary of employees'),
                 (
@@ -35,13 +35,10 @@ class AnswerAgent(BaseAgent):
                     '  * Get the total of sales that occurred between 01/2025 and 04/2025.',
                 ),
                 ('system', '  * What tables are present in the database?'),
+                ('system', '* No SQL is passed to this tool, only requests for data.'),
                 (
                     'system',
-                    '* first, identify the database scope and then generate matching questions, if the database provides data for it.',
-                ),
-                (
-                    'system',
-                    '* generate graphs representing the data for the user using "plotly", only when possible, return empty strings otherwise.',
+                    '* generate graphs representing the data for the user using "plotly", only when the user requires, return empty strings otherwise.',
                 ),
                 ('system', '{format_instructions}'),
                 ('human', '{input}'),
@@ -50,6 +47,7 @@ class AnswerAgent(BaseAgent):
         )
 
         # Agent configuration
+        self.prompt = prompt_model
         self.init_groq_model(temperature=0)
         self.initialize_agent(tools=self.tools, prompt=prompt_model)
 

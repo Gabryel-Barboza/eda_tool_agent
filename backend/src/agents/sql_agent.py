@@ -1,9 +1,14 @@
 from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_community.agent_toolkits.sql.toolkit import SQLDatabaseToolkit
+from langchain_community.utilities import SQLDatabase
 
-from src.tools.database_tool import execute_query, get_tables
+from src.settings import settings
 from src.utils.exceptions import ExecutorNotFoundException, ModelNotFoundException
 
 from .base_agent import BaseAgent
+
+DATABASE_URI = settings.database_uri
+db = SQLDatabase.from_uri(DATABASE_URI)
 
 
 class SQLAgent(BaseAgent):
@@ -55,12 +60,16 @@ class SQLAgent(BaseAgent):
     def tools(self):
         if not self._llm:
             raise ModelNotFoundException()
-        tools = [execute_query, get_tables]
+
+        toolkit = SQLDatabaseToolkit(db=db, llm=self._llm)
+        tools = toolkit.get_tools()
 
         return tools
 
-    def run(self, query: str, dialect: str, data=None):
+    def run(self, query: str, data=None):
         if not self.executor:
             raise ExecutorNotFoundException()
 
-        return self.executor.invoke({'query': query, 'dialect': dialect, 'data': data})
+        return self.executor.invoke(
+            {'query': query, 'dialect': db.dialect, 'data': data}
+        )

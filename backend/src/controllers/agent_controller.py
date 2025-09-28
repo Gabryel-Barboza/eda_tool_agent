@@ -27,4 +27,4 @@ async def prompt_model(input: UserInput) -> JSONOutput:
 async def change_model(provider: str, model: str):
     await chat.change_model(provider, model)
 
-    return
+    return {}

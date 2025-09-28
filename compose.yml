@@ -20,7 +20,11 @@ services:
     restart: always
 
   mysql:
-    image: bitnami/mysql
+    image: mysql
+    volumes:
+      - data:/var/lib/mysql
+    env_file:
+      - .env
     ports:
       - 3306:3306
     networks:
@@ -30,3 +34,5 @@ services:
 networks:
   mainnet:
     driver: bridge
+volumes:
+  data:

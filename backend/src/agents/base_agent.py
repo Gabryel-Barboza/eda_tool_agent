@@ -47,7 +47,7 @@ class BaseAgent:
 
         return tools
 
-    def init_gemini_model(self, model_name='gemini-2.5-flash', **kwargs) -> None:
+    def init_gemini_model(self, model_name='gemini-1.5-pro', **kwargs) -> None:
         """Instantiate a Gemini chat model and register for the agent.
 
         Args:
@@ -59,7 +59,7 @@ class BaseAgent:
         """
         if settings.gemini_api_key:
             self._llm = ChatGoogleGenerativeAI(
-                model_name=model_name, api_key=settings.gemini_api_key, **kwargs
+                model=model_name, api_key=settings.gemini_api_key, **kwargs
             )
 
             return
@@ -68,7 +68,7 @@ class BaseAgent:
             'Your Gemini API key is null, add an API key to the environment to proceed.'
         )
 
-    def init_groq_model(self, model_name='llama-3.1-8b-instant', **kwargs) -> None:
+    def init_groq_model(self, model_name='qwen/qwen3-32b', **kwargs) -> None:
         """Instantiate a Groq chat model and register for the agent.
 
         Args:

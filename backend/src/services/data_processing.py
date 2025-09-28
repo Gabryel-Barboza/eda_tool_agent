@@ -4,7 +4,6 @@ from io import BytesIO
 import pandas as pd
 
 from src.agents import SQLAgent
-from src.tools import db
 
 
 class DataInserter:
@@ -29,7 +28,6 @@ class DataInserter:
 
         response = self.agent.run(
             'Insert this data in the database, pay attention to use the correct data types for each column',
-            db.dialect,
             json,
         )
 
