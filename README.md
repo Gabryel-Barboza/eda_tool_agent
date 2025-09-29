@@ -6,7 +6,7 @@ Este projeto apresenta um **agente inteligente** que utiliza a biblioteca **Lang
 Toda a aplicação é orquestrada de forma eficiente com o **Docker Compose**, garantindo um ambiente de desenvolvimento e produção consistente e fácil de configurar.
 
 ### Índice
-* [Instalação e Inicialização]()
+* [Instalação e Inicialização](https://github.com/Gabryel-Barboza/rag_chatbot_agent/tree/main?tab=readme-ov-file#-instala%C3%A7%C3%A3o-e-inicializa%C3%A7%C3%A3o)
 * [Endpoints](https://github.com/Gabryel-Barboza/rag_chatbot_agent?tab=readme-ov-file#-endpoints-da-aplica%C3%A7%C3%A3o)
 * [Estrutura de Arquivos](https://github.com/Gabryel-Barboza/rag_chatbot_agent?tab=readme-ov-file#-endpoints-da-aplica%C3%A7%C3%A3o)
 * [Detalhes Técnicos](https://github.com/Gabryel-Barboza/rag_chatbot_agent?tab=readme-ov-file#-endpoints-da-aplica%C3%A7%C3%A3o)
