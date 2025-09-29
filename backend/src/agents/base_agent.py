@@ -1,6 +1,7 @@
 from typing import Optional
 
 from langchain.agents import AgentExecutor, create_tool_calling_agent
+from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.tools import BaseTool
 from langchain_core.language_models import BaseChatModel
@@ -32,7 +33,7 @@ class BaseAgent:
                 ),
                 ('system', 'use the tools available to create better answers'),
                 ('system', '{format_instructions}'),
-                ('human', '{question}'),
+                ('human', '{input}'),
                 MessagesPlaceholder('agent_scratchpad'),
             ]
         )
@@ -51,7 +52,7 @@ class BaseAgent:
         """Instantiate a Gemini chat model and register for the agent.
 
         Args:
-            model_name (str, optional): Name of model to be used. Defaults to 'gemini-2.5-flash'.
+            model_name (str, optional): Name of model to be used. Defaults to 'gemini-1.5-pro'.
             temperature (int, optional): Temperature used in the model.
 
         Raises:
@@ -72,7 +73,7 @@ class BaseAgent:
         """Instantiate a Groq chat model and register for the agent.
 
         Args:
-            model_name (str, optional): Name of model to be used. Defaults to 'llama-3.1-8b-instant'.
+            model_name (str, optional): Name of model to be used. Defaults to 'qwen/qwen3-32b'.
             temperature (int, optional): Temperature used in the model
 
         Raises:
@@ -90,9 +91,13 @@ class BaseAgent:
         )
 
     def initialize_agent(
-        self, tools: list[BaseTool] = None, prompt: ChatPromptTemplate | None = None
+        self,
+        memory_key: str = None,
+        memory: ConversationBufferWindowMemory = None,
+        tools: list[BaseTool] = None,
+        prompt: ChatPromptTemplate | None = None,
     ):
-        """Instantiate an agent using the defined options.
+        """Instantiate an agent using the defined options. Should be used after modifying the LLM object.
 
         Args:
             tools (any, optional): Tools for the agent, if None the default toolset is used.
@@ -107,26 +112,37 @@ class BaseAgent:
         agent = create_tool_calling_agent(
             self._llm, tools=tools or self.tools, prompt=prompt or self.prompt
         )
+
+        if memory_key:
+            memory = ConversationBufferWindowMemory(
+                memory_key=memory_key,
+                k=5,
+                input_key='input',
+                output_key='output',
+            )
+
         self.executor = AgentExecutor(
-            agent=agent, tools=tools or self.tools, max_iterations=7
+            agent=agent,
+            tools=tools or self.tools,
+            memory=memory,
+            max_iterations=7,
         )
 
-    def run(self, input: str, output_instructions: str | None = None):
+    def run(self, user_input: str, output_instructions: str | None = None):
         if not self.executor:
             raise ExecutorNotFoundException()
 
         return self.executor.invoke(
-            {'input': input, 'format_instructions': output_instructions}
+            {'input': user_input, 'format_instructions': output_instructions}
         )
 
-    @staticmethod
-    def get_json_parser(output_model: any):
-        """Create a structured JSON output parser prompt for the model response.
+    def get_json_parser(self, output_model: any):
+        """Create a structured JSON output parser for the model response. Prompts the llm to fix the output if invalid.
 
         Args:
-            output_model (any): A BaseModel class with the output format.
+            output_model (any): A BaseModel class with the output format for JSON.
         Returns:
-            instructions (str): Parser instructions for use in model prompt
+            instructions (str): Parser instructions for use in model prompt.
         """
         parser = JsonOutputParser(pydantic_object=output_model)
         instructions = parser.get_format_instructions()

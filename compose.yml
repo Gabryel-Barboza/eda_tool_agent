@@ -1,5 +1,4 @@
 services:
-  
   streamlit:
     build:
       context: .
@@ -8,31 +7,27 @@ services:
       - 8501:8501
     networks:
       - mainnet
-      
+
   fastapi:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 8080:8080
+      - 8000:8000
     networks:
       - mainnet
-    restart: always
 
   mysql:
     image: mysql
-    volumes:
-      - data:/var/lib/mysql
     env_file:
       - .env
+    volumes:
+      - ./init.sql:/docker-entrypoint-init.db/init.sql
     ports:
       - 3306:3306
     networks:
       - mainnet
-    restart: always
 
 networks:
   mainnet:
     driver: bridge
-volumes:
-  data:

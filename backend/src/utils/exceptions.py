@@ -1,3 +1,8 @@
+class WrongFileTypeError(Exception):
+    def __init__(self, msg: str = None):
+        self.msg = msg or 'Wrong file type received, only csv is supported!'
+
+
 class ModelNotFoundException(Exception):
     """Raised when no llm was instantiated before using agents or the model provided was not found."""
 

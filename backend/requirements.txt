@@ -52,12 +52,14 @@ marshmallow==3.26.1
 mdurl==0.1.2
 multidict==6.6.4
 mypy-extensions==1.1.0
+narwhals==2.5.0
 numexpr==2.13.0
 numpy==2.3.3
 orjson==3.11.3
 ormsgpack==1.10.0
 packaging==25.0
 pandas==2.3.2
+plotly==6.3.0
 propcache==0.3.2
 proto-plus==1.26.1
 protobuf==6.32.1
@@ -67,6 +69,7 @@ pydantic==2.11.9
 pydantic-core==2.33.2
 pydantic-settings==2.11.0
 pygments==2.19.2
+pymysql==1.1.2
 python-dateutil==2.9.0.post0
 python-dotenv==1.1.1
 python-multipart==0.0.20

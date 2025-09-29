@@ -1,0 +1,9 @@
+CREATE DATABASE agent_extras;
+
+USE agent_extras;
+
+CREATE TABLE charts(
+	UUID VARCHAR(36) PRIMARY KEY,
+	graph_json JSON,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
