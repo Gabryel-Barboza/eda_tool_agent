@@ -5,7 +5,13 @@ Este projeto apresenta um **agente inteligente** que utiliza a biblioteca **Lang
 
 Toda a aplicação é orquestrada de forma eficiente com o **Docker Compose**, garantindo um ambiente de desenvolvimento e produção consistente e fácil de configurar.
 
-## 🚀 Como começar
+### Índice
+* [Instalação e Inicialização]()
+* [Endpoints](https://github.com/Gabryel-Barboza/rag_chatbot_agent?tab=readme-ov-file#-endpoints-da-aplica%C3%A7%C3%A3o)
+* [Estrutura de Arquivos](https://github.com/Gabryel-Barboza/rag_chatbot_agent?tab=readme-ov-file#-endpoints-da-aplica%C3%A7%C3%A3o)
+* [Detalhes Técnicos](https://github.com/Gabryel-Barboza/rag_chatbot_agent?tab=readme-ov-file#-endpoints-da-aplica%C3%A7%C3%A3o)
+
+## 🚀 Instalação e Inicialização
 
 ### **Pré-requisitos**
 
@@ -114,3 +120,40 @@ A estrutura do projeto está organizada da seguinte forma:
 Se precisar de ajuda ou tiver alguma dúvida, sinta-se à vontade para abrir uma **issue** no repositório do GitHub ou entrar em contato.
 
 ### TODO:
+
+- [x] Criar projeto com POO
+- [x] Criar interface do projeto
+  - [x] Analisar uso do Streamlit como framework
+  - [x] Possibilitar upload de CSV ou zip e uma interface de chat
+  - [x] Possibilitar a troca de modelos no agente
+- [x] Criar API para integração
+  - [x] Criar controladores para separar endpoints
+  - [x] Configurar endpoints FastAPI
+  - [x] Configurar endpoint para mudar modelo LLM utilizado
+  - [x] Configurar tratamento de erros
+- [x] Criar agentes
+  - [x] Criar BaseAgent para generalização entre agentes
+  - [x] Adicionar métodos para troca entre modelos e provedores de agente (Gemini, gemini-2.5-flash...)
+  - [x] Criar AnswerAgent para orquestrador da resposta ao usuário
+  - [x] Criar SQLAgent para interação com banco de dados
+- [x] Criar ferramentas dos agentes
+  - [x] Criar ferramenta para interação com banco de dados
+  - [x] Criar ferramenta para obter tempo e data
+  - [x] Fazer SQLAgent ser uma ferramenta de AnswerAgent
+  - [x] Criar ferramenta ou meio para restringir o formato de saída do agente
+- [x] Criar serviços para utilizar os agentes e inserir dados
+  - [x] Criar serviço para instanciar o agente de chat
+  - [x] Criar serviço para inserir os dados de arquivos csv
+  - [x] Possibilitar alteração do modelo com método do chat
+  - [x] Atualizar o serviço de dados para descompactar arquivos zip
+  - [x] Possibilitar inserção dos dados em banco de dados MySQL
+  - [x] Alterar método de inserção para eficiência de tokens
+- [x] Mover arquivo .env para raiz
+- [] Criar documentação
+  - [ ] Criar docstrings e organizar projeto
+  - [ ] atualizar `docs/`
+- [x] Atualizar requirements.txt e .env.example
+- [ ] Analisar possibilidade para atualização com bancos de dados vetoriais
+- [ ] Atualizar método de criação de gráficos com AnswerAgent para eficiência do uso do agente.
+- [ ] Aprimorar resposta do agente e reduzir erros com engenharia de prompt
+- [ ] Publcar projeto em Cloud para acesso externo ou ngrok
