@@ -6,10 +6,10 @@ Este projeto apresenta um **agente inteligente** que utiliza a biblioteca **Lang
 Toda a aplicação é orquestrada de forma eficiente com o **Docker Compose**, garantindo um ambiente de desenvolvimento e produção consistente e fácil de configurar.
 
 ### Índice
-* [Instalação e Inicialização](https://github.com/Gabryel-Barboza/rag_chatbot_agent/tree/main?tab=readme-ov-file#-instala%C3%A7%C3%A3o-e-inicializa%C3%A7%C3%A3o)
-* [Endpoints](https://github.com/Gabryel-Barboza/rag_chatbot_agent?tab=readme-ov-file#-endpoints-da-aplica%C3%A7%C3%A3o)
-* [Estrutura de Arquivos](https://github.com/Gabryel-Barboza/rag_chatbot_agent?tab=readme-ov-file#-endpoints-da-aplica%C3%A7%C3%A3o)
-* [Detalhes Técnicos](https://github.com/Gabryel-Barboza/rag_chatbot_agent?tab=readme-ov-file#-endpoints-da-aplica%C3%A7%C3%A3o)
+* [Instalação e Inicialização](https://github.com/Gabryel-Barboza/eda_tool_agent/tree/main?tab=readme-ov-file#-instala%C3%A7%C3%A3o-e-inicializa%C3%A7%C3%A3o)
+* [Endpoints da Aplicação](https://github.com/Gabryel-Barboza/eda_tool_agent/tree/main?tab=readme-ov-file#-endpoints-da-aplica%C3%A7%C3%A3o)
+* [Estrutura de Arquivos](https://github.com/Gabryel-Barboza/eda_tool_agent/tree/main?tab=readme-ov-file#-endpoints-da-aplica%C3%A7%C3%A3o)
+* [Detalhes Técnicos](https://github.com/Gabryel-Barboza/eda_tool_agent/tree/main?tab=readme-ov-file#-endpoints-da-aplica%C3%A7%C3%A3o)
 
 ## 🚀 Instalação e Inicialização
 
@@ -135,19 +135,17 @@ Se precisar de ajuda ou tiver alguma dúvida, sinta-se à vontade para abrir uma
   - [x] Criar BaseAgent para generalização entre agentes
   - [x] Adicionar métodos para troca entre modelos e provedores de agente (Gemini, gemini-2.5-flash...)
   - [x] Criar AnswerAgent para orquestrador da resposta ao usuário
-  - [x] Criar SQLAgent para interação com banco de dados
+  - [x] Criar DataAnalystAgent para gerar resposta com os dados
 - [x] Criar ferramentas dos agentes
   - [x] Criar ferramenta para interação com banco de dados
   - [x] Criar ferramenta para obter tempo e data
-  - [x] Fazer SQLAgent ser uma ferramenta de AnswerAgent
+  - [x] Fazer DataAnalystAgent ser uma ferramenta de AnswerAgent
   - [x] Criar ferramenta ou meio para restringir o formato de saída do agente
 - [x] Criar serviços para utilizar os agentes e inserir dados
   - [x] Criar serviço para instanciar o agente de chat
   - [x] Criar serviço para inserir os dados de arquivos csv
   - [x] Possibilitar alteração do modelo com método do chat
   - [x] Atualizar o serviço de dados para descompactar arquivos zip
-  - [x] Possibilitar inserção dos dados em banco de dados MySQL
-  - [x] Alterar método de inserção para eficiência de tokens
 - [x] Mover arquivo .env para raiz
 - [] Criar documentação
   - [ ] Criar docstrings e organizar projeto
@@ -155,5 +153,6 @@ Se precisar de ajuda ou tiver alguma dúvida, sinta-se à vontade para abrir uma
 - [x] Atualizar requirements.txt e .env.example
 - [ ] Analisar possibilidade para atualização com bancos de dados vetoriais
 - [ ] Atualizar método de criação de gráficos com AnswerAgent para eficiência do uso do agente.
+- [ ] Recuperar gráficos de bancos de dados para mais eficiência.
 - [ ] Aprimorar resposta do agente e reduzir erros com engenharia de prompt
 - [ ] Publcar projeto em Cloud para acesso externo ou ngrok
