@@ -1,6 +1,6 @@
 import streamlit as st
 
-from utils.api__tools import post_message
+from utils.api__tools import get_chart, post_message
 
 
 def chat_section():
@@ -31,7 +31,7 @@ def chat_section():
             content = post_message(user_input)
 
             st.session_state['chat_history'].append(
-                {'role': 'bot', 'content': content[0], 'graph': content[1]}
+                {'role': 'bot', 'content': content[0], 'graph_id': content[1]}
             )
 
         st.session_user_query = None
@@ -42,8 +42,9 @@ def chat_section():
                 f'<div class="chat-message {message["role"]}-message">{message["content"]}</div>'
             )
 
-            if 'graph' in message and message['graph']:
+            if 'graph_id' in message and message['graph_id']:
                 try:
-                    st.plotly_chart(message['graph'])
+                    plotly_chart = get_chart(message['graph_id'])
+                    st.plotly_chart(plotly_chart)
                 except Exception:
                     pass

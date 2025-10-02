@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 
 class JSONOutput(BaseModel):
     response: str = Field(description='Model answer.')
-    graph: str = Field(description='plotly graph returned if required.')
+    graph_id: str = Field(description='plotly graph_id returned when required.')
 
 
 class QueryOutput(BaseModel):

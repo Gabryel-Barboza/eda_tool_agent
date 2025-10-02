@@ -4,15 +4,26 @@ from src.agents import AnswerAgent
 from src.schemas import JSONOutput
 from src.utils.exceptions import ModelNotFoundException
 
+MODELS = [
+    'qwen/qwen3-32b',
+    'llama-3.1-8b-instant',
+    'llama-3.3-70b-versatile',
+    'openai/gpt-oss-20b',
+    'openai/gpt-oss-120b',
+    'gemini-2.5-flash',
+    'gemini-2.5-pro',
+]
+
 
 class Chat:
-    def __init__(self):
-        # Init selected LLM model
-        self.agent = AnswerAgent()
-        # Init agent with llm
-        self.agent.initialize_agent(
-            memory_key='chat_history', tools=self.agent.tools, prompt=self.agent.prompt
-        )
+    """
+    Represents the chat service that interacts with the AnswerAgent.
+    This class should be managed as a singleton to maintain chat history.
+    """
+
+    def __init__(self, agent: AnswerAgent):
+        # Recebe uma instância do agente em vez de criar uma nova.
+        self.agent = agent
 
     async def send_prompt(self, user_input: str):
         response = self.agent.run(user_input)
@@ -23,11 +34,16 @@ class Chat:
         try:
             response = JSONOutput.model_validate_json(content)
         except ValidationError:
-            response = {'response': content, 'graph': ''}
+            response = {'response': content, 'graph_id': ''}
 
         return response
 
     async def change_model(self, provider: str, model_name: str):
+        if model_name not in MODELS:
+            raise ModelNotFoundException(
+                'Wrong model name received, try again with the correct model.'
+            )
+
         if provider == 'google':
             self.agent.init_gemini_model(model_name=model_name, temperature=0)
         elif provider == 'groq':
@@ -39,4 +55,24 @@ class Chat:
             memory_key='chat_history', tools=self.agent.tools, prompt=self.agent.prompt
         )
 
-        return
+        return {'detail': f'Model changed to {model_name} from {provider.upper()}'}
+
+
+# --- Implementação do Singleton ---
+
+_chat_instance: Chat | None = None
+
+
+def get_chat_service() -> Chat:
+    """
+    Returns a singleton instance of the Chat service.
+    This ensures that the same agent and memory are used across requests.
+    """
+    global _chat_instance
+    if _chat_instance is None:
+        agent = AnswerAgent()
+        agent.initialize_agent(
+            memory_key='chat_history', tools=agent.tools, prompt=agent.prompt
+        )
+        _chat_instance = Chat(agent)
+    return _chat_instance

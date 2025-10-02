@@ -1,4 +1,4 @@
 from .answer_agent import AnswerAgent
-from .sql_agent import BaseAgent, SQLAgent, db
+from .data_analyst_agent import BaseAgent, DataAnalystAgent
 
-__all__ = ['db', 'BaseAgent', 'SQLAgent', 'AnswerAgent']
+__all__ = ['BaseAgent', 'DataAnalystAgent', 'AnswerAgent']

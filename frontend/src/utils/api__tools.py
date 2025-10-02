@@ -45,7 +45,7 @@ def post_message(msg: str):
             if not content['response']:
                 content['response'] = 'Response error, maybe try other model.'
 
-            return content['response'], content['graph']
+            return content['response'], content['graph_id']
 
         else:
             st.error(f'{response.status_code} {response.reason} - {response.text}')
@@ -70,6 +70,21 @@ def change_model(model_name: str):
 
         if response.ok:
             return
+        else:
+            st.error(f'{response.status_code} {response.reason} - {response.text}')
+    else:
+        st.error('No API URL found, add this variable to the environment first.')
+
+
+def get_chart(graph_id: str):
+    if API_URL:
+        url = API_URL + f'/charts/{graph_id}'
+
+        response = requests.get(url)
+
+        if response.ok:
+            content = response.json()
+            return content['chart']
         else:
             st.error(f'{response.status_code} {response.reason} - {response.text}')
     else:

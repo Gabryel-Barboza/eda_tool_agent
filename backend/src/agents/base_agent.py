@@ -62,6 +62,7 @@ class BaseAgent:
             self._llm = ChatGoogleGenerativeAI(
                 model=model_name, api_key=settings.gemini_api_key, **kwargs
             )
+            self.model_name, self.provider = model_name, 'google'
 
             return
 
@@ -83,6 +84,7 @@ class BaseAgent:
             self._llm = ChatGroq(
                 model_name=model_name, api_key=settings.groq_api_key, **kwargs
             )
+            self.model_name, self.provider = model_name, 'groq'
 
             return
 
@@ -96,6 +98,7 @@ class BaseAgent:
         memory: ConversationBufferWindowMemory = None,
         tools: list[BaseTool] = None,
         prompt: ChatPromptTemplate | None = None,
+        verbose: bool = True,
     ):
         """Instantiate an agent using the defined options. Should be used after modifying the LLM object.
 
@@ -119,6 +122,7 @@ class BaseAgent:
                 k=5,
                 input_key='input',
                 output_key='output',
+                return_messages=True,
             )
 
         self.executor = AgentExecutor(
@@ -126,6 +130,7 @@ class BaseAgent:
             tools=tools or self.tools,
             memory=memory,
             max_iterations=7,
+            verbose=verbose,
         )
 
     def run(self, user_input: str, output_instructions: str | None = None):
@@ -136,8 +141,11 @@ class BaseAgent:
             {'input': user_input, 'format_instructions': output_instructions}
         )
 
+    def get_model_info(self):
+        return (self.model_name, self.provider)
+
     def get_json_parser(self, output_model: any):
-        """Create a structured JSON output parser for the model response. Prompts the llm to fix the output if invalid.
+        """Create a structured JSON output parser for the model response.
 
         Args:
             output_model (any): A BaseModel class with the output format for JSON.

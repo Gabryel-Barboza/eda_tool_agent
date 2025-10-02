@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.streamlit
+    env_file:
+      - .env
     ports:
       - 8501:8501
     networks:
@@ -12,21 +14,24 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    env_file:
+      - .env
     ports:
       - 8000:8000
     networks:
       - mainnet
 
-  mysql:
-    image: mysql
-    env_file:
-      - .env
-    volumes:
-      - ./init.sql:/docker-entrypoint-init.db/init.sql
-    ports:
-      - 3306:3306
-    networks:
-      - mainnet
+        #  mysql_db:
+        #    image: mysql
+        #    env_file:
+        #      - .env
+        #    volumes:
+        #      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+        #    ports:
+        #      - 3306:3306
+        #    networks:
+        #      - mainnet
+        #    restart: always
 
 networks:
   mainnet:

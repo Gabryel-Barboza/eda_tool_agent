@@ -1,19 +1,18 @@
 from fastapi import APIRouter, UploadFile
 
 from src.schemas import UserInput
-from src.services import Chat, DataInserter
+from src.services import DataHandler, get_chat_service
 
 router = APIRouter()
-data_inserter = DataInserter()
-chat = Chat()
+data_handler = DataHandler()
+chat = get_chat_service()
 
 
 @router.post('/upload', status_code=201)
 async def csv_input(file: UploadFile):
-    isZip = file.content_type == 'application/zip'
-    response = await data_inserter.process_csv(file, isZip)
+    await data_handler.load_csv(file)
 
-    return response
+    return {'detail': 'File uploaded successfully'}
 
 
 @router.post('/prompt', status_code=201)
