@@ -9,6 +9,7 @@ Toda a aplicação é empacotada e executada através do **Docker Compose**, gar
 
 ### Índice
 * [Instalação e Inicialização](https://github.com/Gabryel-Barboza/eda_tool_agent/tree/main?tab=readme-ov-file#-instala%C3%A7%C3%A3o-e-inicializa%C3%A7%C3%A3o)
+* [Principais Funcionalidades](https://github.com/Gabryel-Barboza/eda_tool_agent/tree/main?tab=readme-ov-file#-principais-funcionalidades)
 * [Endpoints da Aplicação](https://github.com/Gabryel-Barboza/eda_tool_agent/tree/main?tab=readme-ov-file#-endpoints-da-aplica%C3%A7%C3%A3o)
 * [Estrutura de Arquivos](https://github.com/Gabryel-Barboza/eda_tool_agent/tree/main?tab=readme-ov-file#-endpoints-da-aplica%C3%A7%C3%A3o)
 * [Detalhes Técnicos](https://github.com/Gabryel-Barboza/eda_tool_agent/tree/main?tab=readme-ov-file#-endpoints-da-aplica%C3%A7%C3%A3o)
@@ -70,7 +71,7 @@ O argumento `--build` é opcional, incorporando quaisquer atualizações no cód
 
 ----
 
-## 🌐 Endpoints da Aplicação
+### 🌐 Endpoints da Aplicação
 
 | Serviço | URL |
 | :--- | :--- |
@@ -80,7 +81,7 @@ O argumento `--build` é opcional, incorporando quaisquer atualizações no cód
 ----
 
 
-## 📂 Estrutura de arquivos
+### 📂 Estrutura de arquivos
 
 A estrutura do projeto está organizada da seguinte forma:
 
