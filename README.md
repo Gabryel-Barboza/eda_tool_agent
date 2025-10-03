@@ -1,9 +1,11 @@
 
-# Agente de Chat Inteligente com LangChain 🧠
+# Agente de Chat Inteligente com LangChain - SophIA 🧠
 
-Este projeto apresenta um **agente inteligente** que utiliza a biblioteca **LangChain** para processar e analisar dados de arquivos CSV. O backend, construído com **FastAPI**, gerencia a lógica de processamento e a comunicação com um banco de dados **MySQL**, enquanto o frontend, feito com **Streamlit**, oferece uma interface de chat intuitiva para interagir com o agente.
+Este projeto apresenta uma **solução de Análise Exploratória de Dados (EDA) baseada em agentes**, permitindo que usuários interajam com seus arquivos CSV/ZIP por meio de um **chatbot inteligente**.
 
-Toda a aplicação é orquestrada de forma eficiente com o **Docker Compose**, garantindo um ambiente de desenvolvimento e produção consistente e fácil de configurar.
+A arquitetura utiliza **LangChain** para orquestração de Agentes especializados, **FastAPI** para o backend de processamento de IA, **Streamlit** para o frontend de chat intuitivo e **Plotly/SQLite** para visualização de dados eficiente e sem consumo de tokens.
+
+Toda a aplicação é empacotada e executada através do **Docker Compose**, garantindo um *setup* rápido e confiável.
 
 ### Índice
 * [Instalação e Inicialização](https://github.com/Gabryel-Barboza/eda_tool_agent/tree/main?tab=readme-ov-file#-instala%C3%A7%C3%A3o-e-inicializa%C3%A7%C3%A3o)
@@ -37,21 +39,15 @@ Para executar este projeto, você só precisa ter o **Docker** e o **Docker Comp
     
     O arquivo `.env` deve conter, no mínimo, as seguintes variáveis:
     ```env
-    # Variáveis para o banco de dados MySQL
-    MYSQL_DATABASE=data_csv
-    MYSQL_USER=langchain_agent
-    MYSQL_PASSWORD=mypassword
-    MYSQL_ROOT_PASSWORD=myrootpassword
-
     # API Keys (necessário pelo menos uma)
     GROQ_API_KEY=sua-chave-api
     GEMINI_API_KEY=sua-chave-api
-    # Adicione outras variáveis de ambiente necessárias para a sua aplicação
+    # Adicione ou altere outras variáveis de ambiente necessárias para a sua aplicação
     ```
 
 ### **Inicialização da aplicação**
 
-Para subir todos os serviços (**Streamlit**, **FastAPI** e **MySQL**), execute o seguinte comando (ainda no diretório raiz):
+Para subir todos os serviços (**Streamlit** e **FastAPI**), execute o seguinte comando (ainda no diretório raiz):
 
 ```bash
 docker compose up --build
@@ -61,21 +57,28 @@ O argumento `--build` é opcional, incorporando quaisquer atualizações no cód
 
 -----
 
+## ✨ Principais Funcionalidades
+
+| Funcionalidade | Detalhe Técnico |
+| :--- | :--- |
+| **Análise Conversacional** | Chatbot que responde perguntas sobre os dados, chama ferramentas de análise e gera gráficos sob demanda. |
+| **Arquitetura de Agentes** | Dois Agentes orquestrados (`AnswerAgent` e `DataAnalystAgent`) para separar a lógica de conversação da análise de dados. |
+| **Eficiência de Tokens** | Agente especialista acessa o DataFrame apenas internamente nas ferramentas, otimizando o consumo de tokens. |
+| **Visualização Inteligente** | Geração de gráficos Plotly dinâmicos (Histogramas, Scatter Plots, etc.) sob comando do usuário. |
+| **Cache de Gráficos** | Gráficos são serializados como JSON e armazenados em um banco de dados **SQLite** para evitar o reprocessamento e o envio do JSON/imagem no contexto da LLM. |
+| **Suporte a Arquivos** | Permite upload de arquivos **CSV** e **ZIP** (com descompactação automática). |
+
+----
+
 ## 🌐 Endpoints da Aplicação
 
-### **Acesso à interface (Streamlit)**
+| Serviço | URL |
+| :--- | :--- |
+| **Frontend (Streamlit)** | `http://localhost:8501` |
+| **API Docs (FastAPI - Swagger UI)** | `http://localhost:8000/api/docs` |
 
-Após a inicialização, a interface web estará disponível em:
+----
 
-  * **URL:** `http://localhost:8501`
-
-### **API (FastAPI)**
-
-A API do backend pode ser acessada através da porta `8000`. A documentação interativa (Swagger UI) está disponível em:
-
-  * **URL:** `http://localhost:8000/api/docs`
-
------
 
 ## 📂 Estrutura de arquivos
 
@@ -112,10 +115,15 @@ A estrutura do projeto está organizada da seguinte forma:
 
 ### **Detalhes técnicos**
 
-  * **Backend (FastAPI)**: Recebe os prompts e gerencia a comunicação com o agente LangChain para processar os dados armazenados no banco de dados.
-  * **Frontend (Streamlit)**: Oferece a interface de chat para os usuários interagirem com o agente.
-  * **MySQL**: Armazena os dados processados dos arquivos CSV, servindo como a fonte de dados para o agente.
-  * **LangChain**: A biblioteca principal utilizada para construir o agente inteligente, permitindo o processamento e a análise dos dados de forma conversacional.
+O projeto utiliza uma hierarquia de agentes para otimizar o fluxo de trabalho:
+
+1.  **`AnswerAgent` (Orquestrador):** Recebe o *prompt* do usuário. Decide se a pergunta é geral (responde diretamente) ou de dados. Se for de dados, chama o `DataAnalystAgent` como uma **ferramenta**.
+2.  **`DataAnalystAgent` (Especialista):** Usa ferramentas especializadas (como `create_histogram`, `create_scatter_plot`) que:
+      * Chamada a função **`get_dataframe()`** internamente para acessar os dados.
+      * Geram a figura Plotly (`fig`).
+      * Calculam e geram um **`metadata`** (resumo textual da análise) e salvam o gráfico via **`_save_graph_to_db(fig, metadata)`**.
+3.  **Processamento de Gráficos:** A resposta do `DataAnalystAgent` contém o **`graph_id`** e o **`metadata`**. O *metadata* é injetado no contexto do `AnswerAgent` para ele poder comentar o gráfico, enquanto o Frontend usa o `graph_id` para buscar o JSON do Plotly no SQLite e renderizá-lo.
+
 
 Se precisar de ajuda ou tiver alguma dúvida, sinta-se à vontade para abrir uma **issue** no repositório do GitHub ou entrar em contato.
 
@@ -149,10 +157,11 @@ Se precisar de ajuda ou tiver alguma dúvida, sinta-se à vontade para abrir uma
 - [x] Mover arquivo .env para raiz
 - [] Criar documentação
   - [ ] Criar docstrings e organizar projeto
-  - [ ] atualizar `docs/`
+  - [x] atualizar `docs/`
 - [x] Atualizar requirements.txt e .env.example
 - [ ] Analisar possibilidade para atualização com bancos de dados vetoriais
-- [ ] Atualizar método de criação de gráficos com AnswerAgent para eficiência do uso do agente.
-- [ ] Recuperar gráficos de bancos de dados para mais eficiência.
-- [ ] Aprimorar resposta do agente e reduzir erros com engenharia de prompt
-- [ ] Publcar projeto em Cloud para acesso externo ou ngrok
+- [x] Atualizar método de criação de gráficos com AnswerAgent para eficiência do uso do agente.
+- [x] Recuperar gráficos de bancos de dados para mais eficiência.
+- [x] Aprimorar resposta do agente e reduzir erros com engenharia de prompt
+- [ ] Publicar projeto em Cloud para acesso externo ou ngrok
+
