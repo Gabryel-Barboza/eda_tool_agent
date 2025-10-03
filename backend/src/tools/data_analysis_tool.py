@@ -4,13 +4,14 @@ import uuid
 import pandas as pd
 import plotly.express as px
 from langchain.tools import tool
+from plotly.basedatatypes import BaseFigure
 from sklearn.cluster import KMeans
 
 from src.services.data_processing import get_dataframe
 from src.services.db_services import insert_graphs_db
 
 
-def _save_graph_to_db(fig) -> str:
+def _save_graph_to_db(fig: BaseFigure) -> str:
     """
     Saves the graph's JSON to a 'database' and returns a unique ID.
     In a real application, this would interact with a database.
@@ -32,7 +33,7 @@ def get_data_summary() -> str:
     """
     df = get_dataframe()
 
-    if df.empty:
+    if df is None or df.empty:
         return 'DataFrame empty, no data to analyse.'
 
     info_buffer = io.StringIO()
@@ -58,7 +59,7 @@ def get_data_rows(n_rows: int = 10, sample_method: str = 'head') -> str:
     """
     df = get_dataframe()
 
-    if df.empty:
+    if df is None or df.empty:
         return 'DataFrame empty, no data to analyse.'
 
     if not isinstance(n_rows, int) or n_rows <= 0:
@@ -82,7 +83,7 @@ def get_correlation_matrix() -> str:
     """
     df = get_dataframe()
 
-    if df.empty:
+    if df is None or df.empty:
         return 'DataFrame empty, no data to analyse.'
 
     numeric_df = df.select_dtypes(include='number')
@@ -100,7 +101,7 @@ def detect_outliers_iqr(column: str) -> str:
     """
     df = get_dataframe()
 
-    if df.empty:
+    if df is None or df.empty:
         return 'DataFrame empty, no data to analyse.'
 
     if column not in df.columns:
@@ -130,7 +131,7 @@ def create_histogram(column: str) -> dict:
     """
     df = get_dataframe()
 
-    if df.empty:
+    if df is None or df.empty:
         return 'DataFrame empty, no data to analyse.'
 
     if column not in df.columns:
@@ -154,7 +155,7 @@ def create_scatter_plot(x_column: str, y_column: str) -> dict:
     """
     df = get_dataframe()
 
-    if df.empty:
+    if df is None or df.empty:
         return 'DataFrame empty, no data to analyse.'
 
     if x_column not in df.columns or y_column not in df.columns:
@@ -175,7 +176,7 @@ def create_bar_chart(column: str) -> dict:
     """
     df = get_dataframe()
 
-    if df.empty:
+    if df is None or df.empty:
         return 'DataFrame empty, no data to analyse.'
 
     if column not in df.columns:
@@ -201,7 +202,7 @@ def create_line_plot(x_column: str, y_column: str) -> dict:
     """
     df = get_dataframe()
 
-    if df.empty:
+    if df is None or df.empty:
         return 'DataFrame empty, no data to analyse.'
 
     if x_column not in df.columns or y_column not in df.columns:
@@ -226,7 +227,7 @@ def create_box_plot(y_column: str, x_column: str = None) -> dict:
     """
     df = get_dataframe()
 
-    if df.empty:
+    if df is None or df.empty:
         return 'DataFrame empty, no data to analyse.'
 
     if y_column not in df.columns:
@@ -256,7 +257,7 @@ def create_correlation_heatmap() -> dict:
     """
     df = get_dataframe()
 
-    if df.empty:
+    if df is None or df.empty:
         return 'DataFrame empty, no data to analyse.'
 
     numeric_df = df.select_dtypes(include='number')
@@ -281,7 +282,7 @@ def find_clusters_and_plot(x_column: str, y_column: str, n_clusters: int) -> dic
     """
     df = get_dataframe()
 
-    if df.empty:
+    if df is None or df.empty:
         return 'DataFrame empty, no data to analyse.'
 
     if x_column not in df.columns or y_column not in df.columns:

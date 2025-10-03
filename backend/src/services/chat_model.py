@@ -41,7 +41,7 @@ class Chat:
     async def change_model(self, provider: str, model_name: str):
         if model_name not in MODELS:
             raise ModelNotFoundException(
-                'Wrong model name received, try again with the correct model.'
+                'Wrong model name received, try again with a valid model.'
             )
 
         if provider == 'google':

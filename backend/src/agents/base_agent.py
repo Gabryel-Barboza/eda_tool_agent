@@ -58,17 +58,17 @@ class BaseAgent:
         Raises:
             APIKeyNotFoundException: raised when no API key is present.
         """
-        if settings.gemini_api_key:
-            self._llm = ChatGoogleGenerativeAI(
-                model=model_name, api_key=settings.gemini_api_key, **kwargs
+        if not settings.gemini_api_key:
+            raise APIKeyNotFoundException(
+                'Your Gemini API key is null, add an API key to the environment to proceed.'
             )
-            self.model_name, self.provider = model_name, 'google'
 
-            return
-
-        raise APIKeyNotFoundException(
-            'Your Gemini API key is null, add an API key to the environment to proceed.'
+        self._llm = ChatGoogleGenerativeAI(
+            model=model_name, api_key=settings.gemini_api_key, **kwargs
         )
+        self.model_name, self.provider = model_name, 'google'
+
+        return
 
     def init_groq_model(self, model_name='qwen/qwen3-32b', **kwargs) -> None:
         """Instantiate a Groq chat model and register for the agent.
@@ -80,17 +80,17 @@ class BaseAgent:
         Raises:
             APIKeyNotFoundException: raised when no API key is present.
         """
-        if settings.groq_api_key:
-            self._llm = ChatGroq(
-                model_name=model_name, api_key=settings.groq_api_key, **kwargs
+        if not settings.groq_api_key:
+            raise APIKeyNotFoundException(
+                'Your Groq API key is null, add an API key to the environment to proceed.'
             )
-            self.model_name, self.provider = model_name, 'groq'
 
-            return
-
-        raise APIKeyNotFoundException(
-            'Your Groq API key is null, add an API key to the environment to proceed.'
+        self._llm = ChatGroq(
+            model_name=model_name, api_key=settings.groq_api_key, **kwargs
         )
+        self.model_name, self.provider = model_name, 'groq'
+
+        return
 
     def initialize_agent(
         self,

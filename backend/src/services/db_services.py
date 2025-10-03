@@ -26,6 +26,6 @@ async def get_graph_db(graph_id: str):
 
 def insert_graphs_db(graph_id: str, graph_json: str):
     db.run(
-        'INSERT INTO charts ("uuid", "graph_json") VALUES (":graph_id", ":graph_json")',
+        'INSERT INTO charts ("uuid", "graph_json") VALUES (:graph_id, :graph_json)',
         parameters={'graph_id': graph_id, 'graph_json': graph_json},
     )

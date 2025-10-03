@@ -1,8 +1,10 @@
+import mistune
 import streamlit as st
 
 from utils.api__tools import get_chart, post_message
 
 
+@st.fragment()
 def chat_section():
     st.markdown('### Converse com SophIA')
 
@@ -20,27 +22,13 @@ def chat_section():
             width=580,
         )
 
-    if st.session_state['user_query']:
-        st.session_state['chat_history'].append(
-            {'role': 'user', 'content': st.session_state['user_query']}
-        )
-
-        with st.spinner('SophIA está pensando...'):
-            user_input = st.session_state['user_query']
-
-            content = post_message(user_input)
-
-            st.session_state['chat_history'].append(
-                {'role': 'bot', 'content': content[0], 'graph_id': content[1]}
-            )
-
-        st.session_user_query = None
-
     with chat_holder.container(height=450):
         for message in st.session_state['chat_history']:
-            st.html(
-                f'<div class="chat-message {message["role"]}-message">{message["content"]}</div>'
-            )
+            if 'content' in message and message['content']:
+                st.html(f"""
+                    <pre class="chat-message {message['role']}-message">
+                    {mistune.html(message['content'])}
+                    </pre>""")
 
             if 'graph_id' in message and message['graph_id']:
                 try:
@@ -48,3 +36,25 @@ def chat_section():
                     st.plotly_chart(plotly_chart)
                 except Exception:
                     pass
+
+        if st.session_state['user_query']:
+            st.session_state['chat_history'].append(
+                {'role': 'user', 'content': st.session_state['user_query']}
+            )
+            msg_before = len(st.session_state['chat_history'])
+
+            with st.spinner('SophIA está pensando...'):
+                user_input = st.session_state['user_query']
+
+                content = post_message(user_input)
+
+                st.session_state['chat_history'].append(
+                    {'role': 'bot', 'content': content[0], 'graph_id': content[1]}
+                )
+
+            msg_after = len(st.session_state['chat_history'])
+
+            if msg_after > msg_before:
+                st.rerun(scope='fragment')
+
+            st.session_user_query = None

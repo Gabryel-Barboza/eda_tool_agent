@@ -31,5 +31,5 @@ def sidebar():
     st.write('### Sobre SophIA')
     st.image(image=ROOT_PATH / 'static/sophia.png', width=150)
     st.info(
-        'SophIA é um agente de dados inteligente, criada utilizando o framework Langchain e integrada a ferramentas para análise de dados, permitindo a geração de insights inteligentes para qualquer planilha de dados.',
+        'SophIA é um agente de dados inteligente, criada utilizando o framework Langchain e integrada a ferramentas para análise de dados, permitindo a geração de insights para qualquer planilha de dados.',
     )
