@@ -1,5 +1,7 @@
+import json
 import os
 
+import plotly.io as pl
 import requests
 import streamlit as st
 
@@ -78,13 +80,17 @@ def change_model(model_name: str):
 
 def get_chart(graph_id: str):
     if API_URL:
-        url = API_URL + f'/charts/{graph_id}'
+        url = API_URL + f'/graphs/{graph_id}'
 
         response = requests.get(url)
 
         if response.ok:
             content = response.json()
-            return content['chart']
+
+            graph_json = content.get('graph')
+
+            if graph_json:
+                return pl.from_json(graph_json)
         else:
             st.error(f'{response.status_code} {response.reason} - {response.text}')
     else:

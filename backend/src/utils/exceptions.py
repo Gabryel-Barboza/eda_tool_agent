@@ -30,3 +30,10 @@ class APIKeyNotFoundException(Exception):
             msg
             or 'Your API key for the desired agent is missing, please export a key as an environment variable.'
         )
+
+
+class DatabaseFailedException(Exception):
+    """Raised when a database interaction has failed."""
+
+    def __init__(self, msg: str = None):
+        self.msg = msg or 'An internal error occurred, please try again.'

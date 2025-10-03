@@ -12,7 +12,7 @@ def chat_section():
         st.session_state['chat_history'] = []
 
     chat_holder = st.empty()
-    lcol, rcol = st.columns(2)
+    lcol, _ = st.columns([3, 1])  # Usando uma proporção para o input
 
     with lcol:
         st.chat_input(
@@ -34,8 +34,8 @@ def chat_section():
                 try:
                     plotly_chart = get_chart(message['graph_id'])
                     st.plotly_chart(plotly_chart)
-                except Exception:
-                    pass
+                except Exception as e:
+                    st.error(f'Não foi possível carregar o gráfico: {e}')
 
         if st.session_state['user_query']:
             st.session_state['chat_history'].append(
@@ -57,4 +57,4 @@ def chat_section():
             if msg_after > msg_before:
                 st.rerun(scope='fragment')
 
-            st.session_user_query = None
+            st.session_state['user_query'] = None

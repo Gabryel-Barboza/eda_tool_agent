@@ -4,10 +4,13 @@ from io import BytesIO
 import pandas as pd
 from fastapi import UploadFile
 
+from src.utils.exceptions import WrongFileTypeError
+
 df: pd.DataFrame | None = None
 
 
 def get_dataframe():
+    """Returns the global pandas DataFrame used."""
     return df
 
 
@@ -52,7 +55,7 @@ class DataHandler:
             df = pd.read_csv(file_bytes, sep=separator, header=header)
 
         else:
-            raise ValueError(
+            raise WrongFileTypeError(
                 f'Unsupported file type: {data.content_type}. '
                 'Please upload a CSV or a ZIP file containing a CSV.'
             )
