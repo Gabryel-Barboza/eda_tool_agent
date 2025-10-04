@@ -16,9 +16,8 @@ def get_dataframe():
 
 class DataHandler:
     """
-    Handles data loading and provides tools for Exploratory Data Analysis (E.D.A.).
-    An instance of this class can be used to load a dataset from a CSV file
-    and then apply various analysis methods on the loaded pandas DataFrame.
+    Handles data loading and dataframe population.
+    An instance of this class can be used to load a dataset from a CSV or zip file.
     """
 
     def __init__(self):
@@ -30,26 +29,26 @@ class DataHandler:
         separator: str = ',',
         header: int = 0,
     ) -> bool:
-        """
-        Loads data from an uploaded file (CSV or a ZIP containing a CSV)
-        into a pandas DataFrame.
+        """Loads data from an uploaded file (CSV or a ZIP containing a CSV)
+        into a pandas DataFrame. Inject data into a global df variable.
+
+        Args:
+            data (UploadFile): file to be read.
+            separator (str, optional): csv separator. Defaults to ','.
+            header (int, optional): headers line. Defaults to 0.
+
+        Raises:
+            WrongFileTypeError: When the file received is not supported.
+
+        Returns:
+            bool: True if read was successful.
         """
         global df
         file = await data.read()
         file_bytes = BytesIO(file)
 
         if data.content_type == 'application/zip':
-            with zipfile.ZipFile(file_bytes) as zip_file:
-                csv_filename = next(
-                    (name for name in zip_file.namelist() if name.endswith('.csv')),
-                    None,
-                )
-
-                if not csv_filename:
-                    raise FileNotFoundError('No CSV file found in the zip archive.')
-
-                with zip_file.open(csv_filename) as csv_file:
-                    df = pd.read_csv(csv_file, sep=separator, header=header)
+            df = self._load_zip(file, separator, header)
 
         elif data.content_type in ['text/csv', 'application/vnd.ms-excel']:
             df = pd.read_csv(file_bytes, sep=separator, header=header)
@@ -61,3 +60,29 @@ class DataHandler:
             )
 
         return True
+
+    async def _load_zip(self, file: BytesIO, sep: str, header: int):
+        """Function for reading zip files, decompressing and returning the resulting DataFrame.
+
+        Args:
+            file (BytesIO): zip file
+            sep (str): csv separator
+            header (int): headers line
+
+        Raises:
+            FileNotFoundError: When no CSV file is found after unzipping.
+
+        Returns:
+            DataFrame: Resulting dataframe read.
+        """
+        with zipfile.ZipFile(file) as zip_file:
+            csv_filename = next(
+                (name for name in zip_file.namelist() if name.endswith('.csv')),
+                None,
+            )
+
+            if not csv_filename:
+                raise FileNotFoundError('No CSV file found in the zip archive.')
+
+            with zip_file.open(csv_filename) as csv_file:
+                return pd.read_csv(csv_file, sep=sep, header=header)

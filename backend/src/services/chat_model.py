@@ -2,6 +2,7 @@ from pydantic_core import ValidationError
 
 from src.agents import AnswerAgent
 from src.schemas import JSONOutput
+from src.settings import settings
 from src.utils.exceptions import ModelNotFoundException
 
 MODELS = [
@@ -70,9 +71,11 @@ def get_chat_service() -> Chat:
     """
     global _chat_instance
     if _chat_instance is None:
-        agent = AnswerAgent()
-        agent.initialize_agent(
-            memory_key='chat_history', tools=agent.tools, prompt=agent.prompt
-        )
-        _chat_instance = Chat(agent)
-    return _chat_instance
+        if settings.gemini_api_key or settings.groq_api_key:
+            agent = AnswerAgent()
+            agent.initialize_agent(
+                memory_key='chat_history', tools=agent.tools, prompt=agent.prompt
+            )
+            _chat_instance = Chat(agent)
+            return _chat_instance
+        return None

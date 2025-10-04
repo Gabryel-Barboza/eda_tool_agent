@@ -6,9 +6,12 @@ from .exception_handler import ExceptionHandlerMiddleware
 
 app = FastAPI(
     title='API SophIA EDA',
-    summary='API para controle de requisições para os agentes de análise de dados.',
+    summary='API orquestradora de requisições para agentes e processamento de dados.',
+    description="""## Agente Inteligente e ferramenta EDA para dados 🧠.
+    
+    """,
     root_path='/api',
-    version='0.1.0',
+    version='1.0.0',
 )
 
 origins = [

@@ -21,18 +21,6 @@ services:
     networks:
       - mainnet
 
-        #  mysql_db:
-        #    image: mysql
-        #    env_file:
-        #      - .env
-        #    volumes:
-        #      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-        #    ports:
-        #      - 3306:3306
-        #    networks:
-        #      - mainnet
-        #    restart: always
-
 networks:
   mainnet:
     driver: bridge

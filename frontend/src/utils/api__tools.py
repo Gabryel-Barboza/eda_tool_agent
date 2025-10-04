@@ -1,4 +1,3 @@
-import json
 import os
 
 import plotly.io as pl
@@ -9,15 +8,51 @@ API_URL = os.environ.get('FASTAPI_URL', 'http://localhost:8000/api')
 MODELS = {
     'groq': [
         'qwen/qwen3-32b',
-        'llama-3.1-8b-instant',
-        'llama-3.3-70b-versatile',
-        'openai/gpt-oss-20b',
         'openai/gpt-oss-120b',
     ],
-    'gemini': ['gemini-1.5-pro', 'gemini-2.5-flash', 'gemini-2.5-pro'],
+    'gemini': [
+        'gemini-2.5-flash', 
+        'gemini-2.5-pro',
+    ],
 }
 
 model = 'qwen/qwen3-32b'
+
+
+def send_key(api_key: str, provider: str):
+    if API_URL:
+        url = API_URL + '/send-key'
+        response = requests.post(url, json={'api_key': api_key, 'provider': provider})
+
+        if response.ok:
+            st.session_state['api_key'] = None
+            return
+        else:
+            st.error(f'{response.status_code} {response.reason} - {response.text}')
+    else:
+        st.error('No API URL found, add this variable to the environment first.')
+
+
+def change_model(model_name: str):
+    global model
+
+    # Prevent request for same model
+    if model == model_name:
+        return
+
+    if API_URL:
+        provider = 'groq' if model_name in MODELS['groq'] else 'google'
+        model = model_name
+        url = API_URL + f'/change-model?provider={provider}&model={model_name}'
+
+        response = requests.put(url)
+
+        if response.ok:
+            return
+        else:
+            st.error(f'{response.status_code} {response.reason} - {response.text}')
+    else:
+        st.error('No API URL found, add this variable to the environment first.')
 
 
 def post_file(file):
@@ -52,28 +87,6 @@ def post_message(msg: str):
         else:
             st.error(f'{response.status_code} {response.reason} - {response.text}')
 
-    else:
-        st.error('No API URL found, add this variable to the environment first.')
-
-
-def change_model(model_name: str):
-    global model
-
-    # Prevent request for same model
-    if model == model_name:
-        return
-
-    if API_URL:
-        provider = 'groq' if model_name in MODELS['groq'] else 'google'
-        model = model_name
-        url = API_URL + f'/change-model?provider={provider}&model={model_name}'
-
-        response = requests.put(url)
-
-        if response.ok:
-            return
-        else:
-            st.error(f'{response.status_code} {response.reason} - {response.text}')
     else:
         st.error('No API URL found, add this variable to the environment first.')
 

@@ -2,6 +2,8 @@ from zipfile import BadZipFile
 
 from fastapi import status
 from fastapi.responses import JSONResponse
+from google.api_core.exceptions import ResourceExhausted
+from groq import APIStatusError
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from src.utils.exceptions import (
@@ -35,3 +37,7 @@ class ExceptionHandlerMiddleware(BaseHTTPMiddleware):
                 content=exc.strerror,
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
+        except APIStatusError as exc:
+            return JSONResponse(content=exc.message, status_code=exc.status_code)
+        except ResourceExhausted as exc:
+            return JSONResponse(content=exc.message, status_code=exc.code)

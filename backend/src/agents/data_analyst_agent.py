@@ -17,6 +17,7 @@ from src.tools.data_analysis_tool import (
     get_data_summary,
     get_metadata,
 )
+from src.tools.python_tool import python_ast_repl
 from src.utils.exceptions import ModelNotFoundException
 
 from .base_agent import BaseAgent
@@ -39,7 +40,7 @@ Follow these rules strictly:
     b. **Plan:** Formulate a plan on how to approach the user's request.
     c. **Choose the Right Tool:** Based on the data types you discovered, choose the most appropriate tool. For example, use `create_histogram` for numerical columns and a bar chart tool for categorical columns. The graph generated tools returns a graph_id that should be used in the response.
     d. **Execute:** Use your tools to execute the plan.
-    e. **Last Resort:** The `Python_code` tool is powerful for complex data manipulation and analysis with libraries like pandas & scikit-learn. Use it only as a last resort if no other specific tool can solve the problem.
+    e. **Last Resort:** The `Python_code` tool is powerful for complex data manipulation and analysis with the libraries pandas & plotly. Use it only as a last resort if no other specific tool can solve the problem. Using this tool for file manipulation is not allowed!
 4.  **Graph Generation:** 
         * When a user asks for a chart or graph, use the appropriate tools. 
         * For tools classified as categorical (non-numeric), use categorical columns.
@@ -64,7 +65,7 @@ Follow these rules strictly:
 
         if settings.groq_api_key:
             self.init_groq_model('openai/gpt-oss-20b', temperature=0)
-        else:
+        elif settings.gemini_api_key:
             self.init_gemini_model('gemini-2.5-flash', temperature=0)
 
         self.initialize_agent(tools=self.tools, prompt=prompt_model)
@@ -88,6 +89,7 @@ Follow these rules strictly:
             create_correlation_heatmap,
             get_data_rows,
             get_metadata,
+            python_ast_repl,
         ]
 
         return tools
