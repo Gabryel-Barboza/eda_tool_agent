@@ -32,5 +32,5 @@ def api_key_section():
 
     api_key = st.session_state['api_key']
     key_provider = st.session_state['api_key_provider'].lower()
-    if st.button('Enviar', on_click=send_key, args=[api_key, key_provider]):
+    if st.button('Enviar', on_click=send_key, args=[api_key, key_provider]) and api_key:
         st.toast('Chave enviada com sucesso!')

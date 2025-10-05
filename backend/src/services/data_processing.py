@@ -48,7 +48,7 @@ class DataHandler:
         file_bytes = BytesIO(file)
 
         if data.content_type == 'application/zip':
-            df = self._load_zip(file, separator, header)
+            df = await self._load_zip(file_bytes, separator, header)
 
         elif data.content_type in ['text/csv', 'application/vnd.ms-excel']:
             df = pd.read_csv(file_bytes, sep=separator, header=header)

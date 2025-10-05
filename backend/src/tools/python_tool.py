@@ -31,9 +31,9 @@ if df is None or df.empty:
 * CALCULATIONS: For analysis, use print() to return results. Keep the output small and concise for efficiency; avoid printing large DataFrames.
 * Graph Generation Protocol:
 To create a graph, follow these steps:
-    Generate Figure.
-    Generate Metadata: create a concise, textual summary of the graph.
-    Save Figure: Call the required saving function:
-    print(_save_graph_to_db(fig, metadata))
-The function's output (graph_id) will be returned to you.""",
+    * Generate Figure.
+    * Generate Metadata: create a concise, textual summary of the graph (include stats from dataframe if possible for better understanding, be efficient in the data returned).
+    * Save Figure: Call the required saving function and print metadata for analysis:
+    print(_save_graph_to_db(fig, metadata), metadata)
+The function's output (graph_id, metadata) will be returned to you.""",
 )

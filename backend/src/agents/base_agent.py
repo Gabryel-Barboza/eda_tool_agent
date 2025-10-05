@@ -119,7 +119,7 @@ class BaseAgent:
         if memory_key:
             memory = ConversationBufferWindowMemory(
                 memory_key=memory_key,
-                k=5,
+                k=7,
                 input_key='input',
                 output_key='output',
                 return_messages=True,

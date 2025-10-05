@@ -4,6 +4,7 @@ from fastapi import status
 from fastapi.responses import JSONResponse
 from google.api_core.exceptions import ResourceExhausted
 from groq import APIStatusError
+from langchain_google_genai.chat_models import ChatGoogleGenerativeAIError
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from src.utils.exceptions import (
@@ -41,3 +42,8 @@ class ExceptionHandlerMiddleware(BaseHTTPMiddleware):
             return JSONResponse(content=exc.message, status_code=exc.status_code)
         except ResourceExhausted as exc:
             return JSONResponse(content=exc.message, status_code=exc.code)
+        except ChatGoogleGenerativeAIError:
+            return JSONResponse(
+                content='Failed to create a new Gemini model chat, check if your API key is correct or try sending it again.',
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
