@@ -3,7 +3,7 @@
 
 Este projeto apresenta uma **solução de Análise Exploratória de Dados (EDA) baseada em agentes**, permitindo que usuários interajam com seus arquivos CSV/ZIP por meio de um **chatbot inteligente**.
 
-A arquitetura utiliza **LangChain** para orquestração de Agentes especializados, **FastAPI** para o backend de processamento de IA, **Streamlit** para o frontend de chat intuitivo e **Plotly/SQLite** para visualização de dados eficiente e sem consumo de tokens.
+A arquitetura utiliza **LangChain** para orquestração de Agentes especializados, **FastAPI** para o backend de processamento de IA, **Streamlit** para o frontend de chat intuitivo e **Plotly/SQLite** para visualização de dados eficiente e com pouco consumo de tokens.
 
 Toda a aplicação é empacotada e executada através do **Docker Compose**, garantindo um *setup* rápido e confiável.
 
