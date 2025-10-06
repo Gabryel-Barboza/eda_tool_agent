@@ -8,7 +8,6 @@ API_URL = os.environ.get('FASTAPI_URL', 'http://localhost:8000/api')
 MODELS = {
     'groq': [
         'qwen/qwen3-32b',
-        'openai/gpt-oss-120b',
     ],
     'gemini': [
         'gemini-2.5-flash',
