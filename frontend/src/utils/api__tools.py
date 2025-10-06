@@ -11,15 +11,19 @@ MODELS = {
         'openai/gpt-oss-120b',
     ],
     'gemini': [
-        'gemini-2.5-flash', 
+        'gemini-2.5-flash',
         'gemini-2.5-pro',
     ],
 }
 
-model = 'qwen/qwen3-32b'
+model = ''
 
 
 def send_key(api_key: str, provider: str):
+    if not api_key or not len(api_key) > 1:
+        st.error('Invalid API Key received. Please, try again...', icon='❌')
+        return
+
     if API_URL:
         url = API_URL + '/send-key'
         response = requests.post(url, json={'api_key': api_key, 'provider': provider})

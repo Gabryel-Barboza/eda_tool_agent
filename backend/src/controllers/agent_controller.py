@@ -1,13 +1,21 @@
-from fastapi import APIRouter, UploadFile
+from fastapi import APIRouter, Depends, UploadFile
 
 from src.schemas import ApiKeyInput, UserInput
-from src.services import DataHandler, get_chat_service
+from src.services import Chat, DataHandler, get_chat_service
 from src.settings import settings
 from src.utils.exceptions import APIKeyNotFoundException
 
 router = APIRouter()
 data_handler = DataHandler()
-chat = get_chat_service()
+
+
+def get_chat_dependency() -> Chat:
+    chat_service = get_chat_service()
+
+    if not chat_service:
+        raise APIKeyNotFoundException('No API key provided for any service.')
+
+    return chat_service
 
 
 @router.post('/upload', status_code=201)
@@ -18,34 +26,27 @@ async def csv_input(file: UploadFile):
 
 
 @router.post('/prompt', status_code=201)
-async def prompt_model(input: UserInput):
-    if chat:
-        response = await chat.send_prompt(input.request)
-    else:
-        raise APIKeyNotFoundException
-
+async def prompt_model(input: UserInput, chat: Chat = Depends(get_chat_dependency)):
+    response = await chat.send_prompt(input.request)
     return response
 
 
 @router.put('/change-model', status_code=200)
-async def change_model(provider: str, model: str):
-    if chat:
-        response = await chat.change_model(provider, model)
-    else:
-        raise APIKeyNotFoundException
-
+async def change_model(
+    provider: str, model: str, chat: Chat = Depends(get_chat_dependency)
+):
+    response = await chat.change_model(provider, model)
     return response
 
 
 @router.post('/send-key', status_code=201)
 async def send_key(input: ApiKeyInput):
-    global chat
-
     if input.provider == 'google':
         settings.gemini_api_key = input.api_key
     elif input.provider == 'groq':
         settings.groq_api_key = input.api_key
 
-    chat = get_chat_service()
+    # Força a recriação da instância do chat com a nova chave
+    get_chat_service(force_recreate=True)
 
-    return {}
+    return {'detail': 'API Key registered.'}

@@ -64,18 +64,18 @@ class Chat:
 _chat_instance: Chat | None = None
 
 
-def get_chat_service() -> Chat:
+def get_chat_service(force_recreate: bool = False) -> Chat | None:
     """
     Returns a singleton instance of the Chat service.
     This ensures that the same agent and memory are used across requests.
     """
     global _chat_instance
-    if _chat_instance is None:
+    if _chat_instance is None or force_recreate:
         if settings.gemini_api_key or settings.groq_api_key:
             agent = AnswerAgent()
-            agent.initialize_agent(
-                memory_key='chat_history', tools=agent.tools, prompt=agent.prompt
-            )
             _chat_instance = Chat(agent)
-            return _chat_instance
-        return None
+
+        else:
+            return None
+
+    return _chat_instance

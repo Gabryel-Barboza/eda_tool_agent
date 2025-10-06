@@ -17,7 +17,7 @@ def chat_section():
     with lcol:
         st.chat_input(
             key='user_query',
-            placeholder='Enviar mensagem para SophIA',
+            placeholder='Envie uma mensagem para SophIA',
             max_chars=500,
             width=580,
         )
