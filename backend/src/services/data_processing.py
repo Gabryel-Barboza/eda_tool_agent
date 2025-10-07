@@ -59,7 +59,7 @@ class DataHandler:
                 'Please upload a CSV or a ZIP file containing a CSV.'
             )
 
-        return True
+        return df.head().to_json()
 
     async def _load_zip(self, file: BytesIO, sep: str, header: int):
         """Function for reading zip files, decompressing and returning the resulting DataFrame.

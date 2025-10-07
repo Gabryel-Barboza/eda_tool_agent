@@ -1,6 +1,21 @@
 import streamlit as st
 
-from utils.api__tools import send_key
+from utils.api__tools import ping_server, send_key
+
+count = 1
+
+
+@st.fragment(run_every=10)
+def check_server():
+    global count
+    response, status = ping_server()
+
+    if status:
+        st.info(response, icon='✅', width=600)
+        count = 1
+    else:
+        st.error(f'{count}º tentativa de conexão -> {response}', icon='❌', width=550)
+        count += 1
 
 
 def title():

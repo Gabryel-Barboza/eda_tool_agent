@@ -19,13 +19,14 @@ def upload():
 
     file_upload = st.button('Enviar arquivo', icon='⬇️')
 
-    if st.session_state['uploaded_file']:
+    if file:
         st.session_state['documents'].append(file.name)
 
         if file_upload:
             try:
-                post_file(file, separator)
+                response = post_file(file, separator)
 
                 st.success('O arquivo foi processado com sucesso!')
+                st.dataframe(response)
             except Exception as e:
                 st.error(f'Erro ao ler o arquivo CSV: {e}')

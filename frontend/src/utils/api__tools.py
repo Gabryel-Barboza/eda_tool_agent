@@ -1,3 +1,4 @@
+import json
 import os
 
 import plotly.io as pl
@@ -16,6 +17,19 @@ MODELS = {
 }
 
 model = ''
+
+
+def ping_server():
+    try:
+        response = requests.get(API_URL + '/ping')
+        response.raise_for_status()
+    except Exception:
+        msg = 'Não foi possível se conectar ao servidor, aguarde alguns segundos...'
+        connection = False
+    else:
+        msg, connection = 'Conexão com servidor bem sucedida!', True
+
+    return msg, connection
 
 
 def send_key(api_key: str, provider: str):
@@ -66,7 +80,8 @@ def post_file(file, separator: str):
         response = requests.post(url, files=file)
 
         if response.ok:
-            return response.json()
+            content = response.json()
+            return json.loads(content['data'])
 
         else:
             st.error(f'{response.status_code} {response.reason} - {response.text}')

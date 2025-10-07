@@ -1,6 +1,14 @@
 import streamlit as st
 
-from components import api_key_section, chat_section, sidebar, style, title, upload
+from components import (
+    api_key_section,
+    chat_section,
+    check_server,
+    sidebar,
+    style,
+    title,
+    upload,
+)
 
 st.set_page_config(
     page_title='SophIA - EDA Tool',
@@ -15,6 +23,7 @@ style()
 with st.sidebar:
     sidebar()
 
+check_server()
 title()
 st.divider()
 api_key_section()
