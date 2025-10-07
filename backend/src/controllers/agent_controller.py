@@ -18,11 +18,6 @@ def get_chat_dependency() -> Chat:
     return chat_service
 
 
-@router.get('/', status_code=200)
-async def ping():
-    return True
-
-
 @router.post('/upload', status_code=201)
 async def csv_input(
     separator: str,

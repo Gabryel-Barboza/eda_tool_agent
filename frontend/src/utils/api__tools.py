@@ -7,6 +7,7 @@ import streamlit as st
 
 ROOT_URL = os.environ.get('FASTAPI_URL', 'http://localhost:8000')
 API_URL = ROOT_URL + '/api'
+
 MODELS = {
     'groq': [
         'qwen/qwen3-32b',
@@ -22,7 +23,7 @@ model = ''
 
 def ping_server():
     try:
-        response = requests.get(ROOT_URL, timeout=60)
+        response = requests.head(API_URL + '/healthz', timeout=60)
         response.raise_for_status()
     except Exception:
         msg = 'Não foi possível se conectar ao servidor, aguarde a sua inicialização...'
