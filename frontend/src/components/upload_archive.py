@@ -10,6 +10,13 @@ def upload():
         key='uploaded_file',
     )
 
+    separator = st.radio(
+        'Separador do CSV', [', (vírgula)', '; (ponto e vírgula)', 'outro']
+    )
+
+    if separator == 'outro':
+        separator = st.text_input('Insira o separador')
+
     file_upload = st.button('Enviar arquivo', icon='⬇️')
 
     if st.session_state['uploaded_file']:
@@ -17,7 +24,7 @@ def upload():
 
         if file_upload:
             try:
-                post_file(file)
+                post_file(file, separator)
 
                 st.success('O arquivo foi processado com sucesso!')
             except Exception as e:

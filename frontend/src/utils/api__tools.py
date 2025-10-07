@@ -58,10 +58,11 @@ def change_model(model_name: str):
         st.error('No API URL found, add this variable to the environment first.')
 
 
-def post_file(file):
+def post_file(file, separator: str):
     if API_URL:
         file = {'file': (file.name, file, file.type)}
-        url = API_URL + '/upload'
+        url = API_URL + f'/upload?separator={separator[0]}'
+
         response = requests.post(url, files=file)
 
         if response.ok:

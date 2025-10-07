@@ -19,8 +19,11 @@ def get_chat_dependency() -> Chat:
 
 
 @router.post('/upload', status_code=201)
-async def csv_input(file: UploadFile):
-    await data_handler.load_csv(file)
+async def csv_input(
+    separator: str,
+    file: UploadFile,
+):
+    await data_handler.load_csv(file, separator)
 
     return {'detail': 'File uploaded successfully'}
 
