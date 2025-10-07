@@ -22,7 +22,7 @@ model = ''
 
 def ping_server():
     try:
-        response = requests.get(ROOT_URL)
+        response = requests.get(ROOT_URL, timeout=60)
         response.raise_for_status()
     except Exception:
         msg = 'Não foi possível se conectar ao servidor, aguarde a sua inicialização...'
