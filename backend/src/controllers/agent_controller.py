@@ -5,7 +5,7 @@ from src.services import Chat, DataHandler, get_chat_service
 from src.settings import settings
 from src.utils.exceptions import APIKeyNotFoundException
 
-router = APIRouter()
+router = APIRouter(prefix='')
 data_handler = DataHandler()
 
 
@@ -18,7 +18,7 @@ def get_chat_dependency() -> Chat:
     return chat_service
 
 
-@router.get('/ping', status_code=200)
+@router.get('/', status_code=200)
 async def ping():
     return True
 

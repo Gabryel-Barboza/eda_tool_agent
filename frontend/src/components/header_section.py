@@ -5,7 +5,7 @@ from utils.api__tools import ping_server, send_key
 count = 1
 
 
-@st.fragment(run_every=10)
+@st.fragment(run_every=30)
 def check_server():
     global count
     response, status = ping_server()

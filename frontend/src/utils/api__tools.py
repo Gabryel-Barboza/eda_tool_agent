@@ -5,7 +5,8 @@ import plotly.io as pl
 import requests
 import streamlit as st
 
-API_URL = os.environ.get('FASTAPI_URL', 'http://localhost:8000/api')
+ROOT_URL = os.environ.get('FASTAPI_URL', 'http://localhost:8000')
+API_URL = ROOT_URL + '/api'
 MODELS = {
     'groq': [
         'qwen/qwen3-32b',
@@ -21,10 +22,10 @@ model = ''
 
 def ping_server():
     try:
-        response = requests.get(API_URL + '/ping')
+        response = requests.get(ROOT_URL)
         response.raise_for_status()
     except Exception:
-        msg = 'Não foi possível se conectar ao servidor, aguarde alguns segundos...'
+        msg = 'Não foi possível se conectar ao servidor, aguarde a sua inicialização...'
         connection = False
     else:
         msg, connection = 'Conexão com servidor bem sucedida!', True
