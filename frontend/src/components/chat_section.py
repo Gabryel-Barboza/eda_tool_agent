@@ -25,10 +25,9 @@ def chat_section():
     with chat_holder.container(height=450):
         for message in st.session_state['chat_history']:
             if 'content' in message and message['content']:
-                st.html(f"""
-                    <pre class="chat-message {message['role']}-message">
-                    {mistune.html(message['content'])}
-                    </pre>""")
+                st.html(
+                    f"""<pre class="chat-message {message['role']}-message">{mistune.html(message['content'])}</pre>"""
+                )
 
             if 'graph_id' in message and message['graph_id']:
                 try:

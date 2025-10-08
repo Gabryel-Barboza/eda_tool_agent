@@ -64,7 +64,7 @@ class BaseAgent:
             )
 
         self._llm = ChatGoogleGenerativeAI(
-            model=model_name, api_key=settings.gemini_api_key, **kwargs
+            model=model_name, google_api_key=settings.gemini_api_key, **kwargs
         )
         self.model_name, self.provider = model_name, 'google'
 

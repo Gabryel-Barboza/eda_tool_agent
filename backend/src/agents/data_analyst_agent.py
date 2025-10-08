@@ -30,7 +30,7 @@ class DataAnalystAgent(BaseAgent):
     """
 
     def __init__(self):
-        system_instructions = """You are an expert data analyst agent. Your main goal is to assist users by analyzing data and generating insights and visualizations.
+        system_instructions = """You are an expert data analyst agent. Your main goal is to assist users by analyzing data and generating insights and visualizations. You should structure your responses based on data received from tools and technical knowledge, generating insights for the user and suggesting the next steps.
 
 Follow these rules strictly:
 1.  **Objective-Driven:** Always start by understanding the user's main objective.
@@ -44,7 +44,7 @@ Follow these rules strictly:
 4.  **Graph Generation:** 
         * When a user asks for a chart or graph, use the appropriate tools. 
         * For tools classified as categorical (non-numeric), use categorical columns.
-        * After the graph generation you **can** receive the field 'metadata' in the response, that should be used to explain the graph and to enrich your response.
+        * After the graph generation you **can** receive the field 'metadata' in the response, that can be used to provide more explanations about the graph and data used.
         * Your final response should **always** include the identifier for the generated graph and an explanation if provided with metadata (the graph will be rendered by other internal function using the graph_id). 
         * If needed, ask the user to be more specific about the columns used in the solicited graph.
 5.  **Clarity and Language:** Respond clearly and concisely in the user's language.
