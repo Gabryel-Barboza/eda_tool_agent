@@ -3,6 +3,8 @@
 
 Este projeto apresenta uma **solução de Análise Exploratória de Dados (EDA) baseada em agentes**, permitindo que usuários interajam com seus arquivos CSV/ZIP por meio de um **chatbot inteligente**.
 
+<img width="1358" height="630" alt="interface_sophia" src="https://github.com/user-attachments/assets/d8f9efbe-44e5-4369-b006-f01e123f8dd1" />
+
 A arquitetura utiliza **LangChain** para orquestração de Agentes especializados, **FastAPI** para o backend de processamento de IA, **Streamlit** para o frontend de chat intuitivo e **Plotly/SQLite** para visualização de dados eficiente e com pouco consumo de tokens.
 
 Toda a aplicação é empacotada e executada através do **Docker Compose**, garantindo um *setup* rápido e confiável.
@@ -68,6 +70,27 @@ O argumento `--build` é opcional, incorporando quaisquer atualizações no cód
 | **Visualização Inteligente** | Geração de gráficos Plotly dinâmicos (Histogramas, Scatter Plots, etc.) sob comando do usuário. |
 | **Cache de Gráficos** | Gráficos são serializados como JSON e armazenados em um banco de dados **SQLite** para evitar o reprocessamento e o envio do JSON/imagem no contexto da LLM. |
 | **Suporte a Arquivos** | Permite upload de arquivos **CSV** e **ZIP** (com descompactação automática). |
+
+### Alguns Exemplos
+
+----
+* Chat com SophIA
+
+<img width="1086" height="351" alt="grafico_distribuicao_amount" src="https://github.com/user-attachments/assets/50cf6c42-af1c-4cfa-880d-e35c77cff44d" />
+
+* Histograma de Distribuição dos Dados
+
+<img width="1358" height="572" alt="grafico_distribuicao_amountII" src="https://github.com/user-attachments/assets/141fc867-e13d-4721-bae2-6a43201898cc" />
+
+
+* Mapa de Correlação dos Dados
+
+<img width="1093" height="526" alt="mapa_correlacao" src="https://github.com/user-attachments/assets/05b438b0-01eb-4e33-aa83-6e4069db714b" />
+
+* Gráfico de Clusters
+
+<img width="1071" height="502" alt="grafico_agrupamentos_variaveis" src="https://github.com/user-attachments/assets/d06a309d-3601-4a1b-a387-a673da9f63fc" />
+
 
 ----
 
