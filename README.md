@@ -80,7 +80,8 @@ O argumento `--build` é opcional, incorporando quaisquer atualizações no cód
 
 * Histograma de Distribuição dos Dados
 
-<img width="1358" height="572" alt="grafico_distribuicao_amountII" src="https://github.com/user-attachments/assets/141fc867-e13d-4721-bae2-6a43201898cc" />
+<img width="1105" height="525" alt="grafico_distribuicao_amount_II" src="https://github.com/user-attachments/assets/3ec40087-3fa3-49be-a84f-0726076f277e" />
+
 
 
 * Mapa de Correlação dos Dados
